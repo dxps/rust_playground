@@ -1,11 +1,12 @@
 use unicode_segmentation::UnicodeSegmentation;
 
 pub fn reverse(input: &str) -> String {
-    let mut g_str = UnicodeSegmentation::graphemes(input, true).collect::<Vec<&str>>();
-    let mut result = String::with_capacity(g_str.capacity());
-    g_str.reverse();
-    for gc in g_str {
-        result.push_str(gc);
+    let mut result = String::new();
+    for g_char in UnicodeSegmentation::graphemes(input, true) {
+        result = [g_char, &result].join("");
     }
     result
+
+    // After submitting my updated solution, I found others' extremely short (one-line) version:
+    // input.graphemes(true).rev().collect()
 }
