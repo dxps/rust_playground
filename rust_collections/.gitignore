@@ -11,3 +11,8 @@ Cargo.lock
 
 ## ignoring the compiled main.rs
 src/main
+
+## IDE related
+
+.vscode
+.idea
