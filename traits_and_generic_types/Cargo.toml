@@ -1,0 +1,12 @@
+[package]
+name = "traits_and_generic_types"
+version = "0.1.0"
+authors = ["mariusi <marius.ileana@connectis.nl>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "tagged_gen_type"
+path = "src/tagged_gen_type.rs"
+
