@@ -12,5 +12,11 @@ This project has a simple structure:
 
 ### Binaries & Usage
 
-- `tagged_gen_type` - has a `struct` that includes a generic type (`T`)
+- `tagged_gen_type`
+    - has a `struct` that includes a generic type (`T`)
+    - run: `cargo run --bin tagged_gen_type`
+- `dyn_dispatch_show1`
+    - shows how a vector (homogeneous type structure) can contain different data types, based on a common trait.
+    - `&dyn` is a language feature allowing a dynamic (at runtime, versus static at compile time) dispatch
+    - run: `cargo run --bin dyn_dispatch_show1`
 

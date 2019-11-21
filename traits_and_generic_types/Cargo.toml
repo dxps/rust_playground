@@ -10,3 +10,6 @@ edition = "2018"
 name = "tagged_gen_type"
 path = "src/tagged_gen_type.rs"
 
+[[bin]]
+name = "dyn_dispatch_show1"
+path = "src/dyn_dispatch_show1.rs"
