@@ -1,16 +1,18 @@
 ## minigrep
 
-This is the sample from "The Book", chapter 12.
+This is the CLI example from "The Book" (TRPL), chapter 12 "An I/O Project: Building a Command Line Program".
 <br/>
 
 ### Usage
 
-Running a standard search:
+Arguments: <query> <path-to-file>
+
+For example, run a regular (case sensitive) search using:
 ```bash
-cargo run to test/poem.
+$ cargo run to test/poem.txt
 ```
 
-Run a case insesitive search:
+Run a case insesitive search using:
 ```bash
 $ CASE_INSENSITIVE=1 cargo run to test/poem.
 ```
