@@ -8,4 +8,24 @@ edition = "2018"
 
 [dependencies]
 hyper = "0.13.2"
+## explicitly needed in "service_ex1.rs"
 tokio = { version = "0.2", features = [ "full" ] }
+futures = "0.3.4"
+lazy_static = "1.4.0"
+serde = "1.0"
+serde_derive = "1.0"
+tera = "1.0"
+log = "0.4"
+pretty_env_logger = "0.4"
+
+[dependencies.uuid]
+features = [ "serde", "v4" ]
+version = "0.8"
+
+[[bin]]
+name = "service-ex1"
+path = "src/service_ex1.rs"
+
+[[bin]]
+name = "service-ex2"
+path = "src/service-ex2.rs"
