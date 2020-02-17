@@ -16,3 +16,6 @@ path = "src/spawning_a_thread.rs"
 name = "msg_pass_thread"
 path = "src/msg_pass_thread.rs"
 
+[[bin]]
+name = "sharing_ownership_threads"
+path = "src/sharing_ownership_threads.rs"
