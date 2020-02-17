@@ -14,5 +14,6 @@ fn main() {
         }
     });
 
+    // Waiting for the spawned thread to finish, then end our main function (and thread).
     join_handle.join().unwrap();
 }

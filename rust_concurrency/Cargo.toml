@@ -7,3 +7,12 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+[[bin]]
+name = "spawning_a_thread"
+path = "src/spawning_a_thread.rs"
+
+[[bin]]
+name = "msg_pass_thread"
+path = "src/msg_pass_thread.rs"
+
