@@ -9,6 +9,6 @@ edition = "2018"
 [dependencies]
 
 [[bin]]
-name = "avg_coll"
-path = "src/avg_coll.rs"
+name = "avg_coll_bin"
+path = "src/avg_coll_bin.rs"
 
