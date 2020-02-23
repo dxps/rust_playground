@@ -2,7 +2,7 @@
 // Example of using `AveragedCollection` that is defined in `lib.rs`.
 //
 
-use rust_oop::avg_coll::AveragedCollection;
+use rust_oop::my_colls::avg_coll::AveragedCollection;
 
 fn main() {
     let mut coll = AveragedCollection::new();
