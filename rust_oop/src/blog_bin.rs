@@ -1,4 +1,4 @@
-use blog::Post;
+use rust_oop::blog::Post;
 
 fn main() {
     let mut post = Post::new();
