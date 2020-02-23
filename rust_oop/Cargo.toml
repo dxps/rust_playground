@@ -12,3 +12,11 @@ edition = "2018"
 name = "avg_coll_bin"
 path = "src/avg_coll_bin.rs"
 
+[[bin]]
+name = "blog_bin"
+path = "src/blog_bin.rs"
+
+[lib]
+name = "blog"
+path = "src/blog.rs"
+test = false
