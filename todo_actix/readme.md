@@ -13,3 +13,7 @@ This is a sample web app made using Actix.
 ## Run
 
 Use the classic `cargo run` to start the project.
+
+## TODOs
+
+- check database connection health at startup
