@@ -5,7 +5,9 @@ use tokio_postgres::NoTls;
 
 use dotenv::dotenv;
 
+use crate::db::check_init_db_conn;
 use crate::handlers::*;
+use std::io::{Error, ErrorKind};
 
 mod config;
 mod db;
@@ -17,10 +19,16 @@ async fn main() -> io::Result<()> {
     dotenv().ok();
 
     let config = config::Config::from_env().unwrap();
-
     let pool = config.pg.create_pool(NoTls).unwrap();
+
+    if !check_init_db_conn(pool.clone()).await {
+        return Result::Err(Error::new(ErrorKind::Other, ""));
+    } else {
+        println!(">>> DB Connection is successful. ");
+    }
+
     println!(
-        ">>> DB Pool status: available/size = {}/{}",
+        ">>> DB Pool init state: available/size = {}/{}",
         pool.status().available,
         pool.status().size
     );
