@@ -12,5 +12,32 @@ This is a sample web app made using Actix.
 
 ## Run
 
-Use the classic `cargo run` to start the project.
+Use the standard `cargo run` to run it.
+
+## Usage
+
+Access / using:
+```bash
+$ curl -s localhost:8080 | jq
+{
+  "status": "UP"
+}
+$
+```
+
+Get the list of all todos:
+```bash
+$ curl -s localhost:8080/todos | jq
+[
+  {
+    "id": 1,
+    "title": "List 1"
+  },
+  {
+    "id": 2,
+    "title": "List 2"
+  }
+]
+$
+```
 

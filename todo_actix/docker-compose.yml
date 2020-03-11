@@ -4,9 +4,10 @@ services:
   postgres:
     image: postgres:11-alpine
     restart: always
+    container_name: todo_actix_pgdb
     environment:
       POSTGRES_USER: todo_actix
       POSTGRES_PASSWORD: todo_actix
       POSTGRES_DB: todo_actix
     ports:
-    - 5432:5432
+    - 5433:5432
