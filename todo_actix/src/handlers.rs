@@ -14,9 +14,18 @@ pub async fn get_todos(db_pool: web::Data<Pool>) -> impl Responder {
     let client: Client = db_pool.get().await.expect("Error getting db connection");
 
     let result = db::get_todos(&client).await;
-
     match result {
         Ok(todos) => HttpResponse::Ok().json(todos),
+        Err(_) => HttpResponse::InternalServerError().into(),
+    }
+}
+
+pub async fn get_todo_items(db_pool: web::Data<Pool>, path: web::Path<(i32,)>) -> impl Responder {
+    let client = db_pool.get().await.expect("Error getting db connection");
+
+    let result = db::get_todo_items(&client, path.0).await;
+    match result {
+        Ok(items) => HttpResponse::Ok().json(items),
         Err(_) => HttpResponse::InternalServerError().into(),
     }
 }

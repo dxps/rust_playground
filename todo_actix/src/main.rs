@@ -43,6 +43,7 @@ async fn main() -> io::Result<()> {
             .data(pool.clone())
             .route("/", web::get().to(status))
             .route("/todos{_:/?}", web::get().to(get_todos))
+            .route("/todos/{id}/items{_:/?}", web::get().to(get_todo_items))
     })
     .bind(format!("{}:{}", config.server.host, config.server.port))?
     .run()
