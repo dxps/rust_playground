@@ -25,7 +25,7 @@ pub async fn get_todos(client: &Client) -> Result<Vec<TodoList>, io::Error> {
 /// Get the items that exists in a todolist.
 pub async fn get_todo_items(client: &Client, id: i32) -> Result<Vec<TodoItem>, io::Error> {
     let stmt = client
-        .prepare("select * from todo_item where id = $1")
+        .prepare("select * from todo_item where list_id = $1")
         .await
         .unwrap();
     let items = client
@@ -49,4 +49,23 @@ pub async fn check_init_db_conn(pool: Pool) -> bool {
         }
         Ok(_) => true,
     }
+}
+
+pub async fn create_todo(client: &Client, title: String) -> Result<TodoList, io::Error> {
+    let stmt = client
+        .prepare("insert into todo_list (title) values ($1) returning id, title")
+        .await
+        .unwrap();
+    client
+        .query(&stmt, &[&title])
+        .await
+        .expect("Error creating todo list")
+        .iter()
+        .map(|row| TodoList::from_row_ref(row).unwrap())
+        .collect::<Vec<TodoList>>()
+        .pop()
+        .ok_or(io::Error::new(
+            io::ErrorKind::Other,
+            "Error creating todo list",
+        ))
 }

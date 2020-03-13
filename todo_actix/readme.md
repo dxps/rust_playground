@@ -25,7 +25,7 @@ $ curl -s localhost:8080 | jq
 $
 ```
 
-Get the list of all todos:
+Get all todo lists:
 ```bash
 $ curl -s localhost:8080/todos | jq
 [
@@ -41,3 +41,29 @@ $ curl -s localhost:8080/todos | jq
 $
 ```
 
+Get the items of a todo list:
+```shell script
+$ curl -s localhost:8080/todos/1/items | jq
+[
+  {
+    "id": 1,
+    "title": "Item 1",
+    "checked": false,
+    "list_id": 1
+  },
+  {
+    "id": 3,
+    "title": "Item 2",
+    "checked": false,
+    "list_id": 1
+  }
+]
+$ 
+```
+
+Create a new todo list:
+```shell script
+$ curl -X POST -H "content-type: application/json" -d '{"title":"List 3"}' localhost:8080/todos
+  {"id":3,"title":"List 3"}%
+$
+```
