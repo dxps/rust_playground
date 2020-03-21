@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: common_pgdb
+    environment:
+      POSTGRES_DB: actix_rest_api
+      POSTGRES_PASSWORD: common
+    ports:
+      - "5433:5432"
+networks: 
+  default:
+    name: common_net
