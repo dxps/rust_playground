@@ -27,35 +27,40 @@ pub struct User {
 impl User {
     pub fn find_all() -> Result<Vec<Self>, ApiError> {
         let conn = db::get_conn()?;
+
         let users = user::table.load::<User>(&conn)?;
         Ok(users)
     }
 
     pub fn find(id: Uuid) -> Result<Self, ApiError> {
         let conn = db::get_conn()?;
+
         let user = user::table.filter(user::id.eq(id)).first(&conn)?;
         Ok(user)
     }
 
     pub fn create(user_dto: UserDto) -> Result<Self, ApiError> {
         let conn = db::get_conn()?;
+
         let user = User::from(user_dto);
         let user = diesel::insert_into(user::table).values(user).get_result(&conn)?;
         Ok(user)
     }
 
     pub fn update(id: Uuid, user_dto: UserDto) -> Result<Self, ApiError> {
-        //FIXME: Update the `updated_at` column
+        use crate::schema::user::dsl::updated_at;
         let conn = db::get_conn()?;
+
         let user = diesel::update(user::table)
             .filter(user::id.eq(id))
-            .set(user_dto)
+            .set((user_dto, updated_at.eq(Utc::now().naive_utc())))
             .get_result(&conn)?;
         Ok(user)
     }
 
     pub fn delete(id: Uuid) -> Result<usize, ApiError> {
         let conn = db::get_conn()?;
+
         let res = diesel::delete(user::table.filter(user::id.eq(id))).execute(&conn)?;
         Ok(res)
     }
