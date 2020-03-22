@@ -24,11 +24,9 @@ impl std::fmt::Display for ApiError {
 impl From<DieselError> for ApiError {
     fn from(error: DieselError) -> ApiError {
         match error {
-            DieselError::DatabaseError(_, err)
-            => ApiError::new(409, err.message().to_string()),
-            DieselError::NotFound
-            => ApiError::new(404, "Record not found: {}".to_string()),
-            err => ApiError::new(500, format!("DB Error: {}", err))
+            DieselError::DatabaseError(_, err) => ApiError::new(409, err.message().to_string()),
+            DieselError::NotFound => ApiError::new(404, "Record not found: {}".to_string()),
+            err => ApiError::new(500, format!("DB Error: {}", err)),
         }
     }
 }
@@ -46,7 +44,6 @@ impl ResponseError for ApiError {
                 "Internal Server Error".to_string()
             }
         };
-        HttpResponse::build(status_code)
-            .json(json!( { "message": message }))
+        HttpResponse::build(status_code).json(json!({ "message": message }))
     }
 }
