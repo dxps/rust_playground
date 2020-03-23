@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate actix_web;
 
-use actix_web::{middleware, web, App, HttpRequest, HttpServer, Result};
+use actix_web::{middleware, App, HttpRequest, HttpResponse, HttpServer};
 use serde::Serialize;
 
 pub struct MessageApp {
@@ -33,14 +33,14 @@ struct IndexResponse {
 }
 
 #[get("/")]
-fn index(req: HttpRequest) -> Result<web::Json<IndexResponse>> {
+async fn index(req: HttpRequest) -> std::io::Result<HttpResponse> {
     let hello = req
         .headers()
         .get("hello")
         .and_then(|val| val.to_str().ok())
         .unwrap_or_else(|| "world");
 
-    Ok(web::Json(IndexResponse {
+    Ok(HttpResponse::Ok().json(IndexResponse {
         message: hello.to_owned(),
     }))
 }
