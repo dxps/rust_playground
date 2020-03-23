@@ -18,6 +18,7 @@ impl MessageApp {
         HttpServer::new(move || {
             App::new()
                 .wrap(middleware::Logger::default())
+                .wrap(middleware::DefaultHeaders::new().header("x-myheader-1", "koohah"))
                 .service(index)
         })
         .bind(("127.0.0.1", self.port))?
