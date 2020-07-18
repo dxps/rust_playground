@@ -1,3 +1,6 @@
 ## A journey into Rust Programming Language
 
-This is a WIP.
+The purpose of this repo is to collect in one place all the concepts, abstractions, and features of this wonderful language.
+
+state: WIP
+
