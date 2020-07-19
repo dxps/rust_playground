@@ -1,0 +1,10 @@
+[package]
+name = "calc_weight_on_mars"
+version = "0.1.0"
+authors = ["devisions <marius.ileana@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dialoguer = "0.6"
