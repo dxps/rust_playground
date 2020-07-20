@@ -16,10 +16,7 @@ impl Server {
         let listener = match TcpListener::bind(&self.addr) {
             Ok(listener) => listener,
             Err(error) => {
-                println!(
-                    "Error: Cannot listen on '{}'. Details: {}",
-                    self.addr, error
-                );
+                println!("Error: Cannot listen on '{}'. Details: {}", self.addr, error);
                 return;
             }
         };
@@ -40,9 +37,7 @@ impl Server {
                                 Ok(request) => {
                                     todo!();
                                 }
-                                Err(e) => {
-                                    println!("Error: Failed to parse the request. Details: {}", e);
-                                }
+                                Err(e) => println!("Error: Failed to parse the request. Details: {}", e),
                             }
                         }
                         Err(e) => {

@@ -1,5 +1,6 @@
-use http::Method;
-use http::Request;
+// TODO: temporary used
+#![allow(dead_code)]
+
 use server::Server;
 
 mod http;
