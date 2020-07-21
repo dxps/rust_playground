@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
 /// A request's method can be one of the variants of this enum.
+#[derive(Debug)]
 pub enum Method {
     GET,
     POST,

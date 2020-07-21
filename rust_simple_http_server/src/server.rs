@@ -28,26 +28,18 @@ impl Server {
                     let mut buffer = [0; 1024];
                     match stream.read(&mut buffer) {
                         Ok(_) => {
-                            println!(
-                                "Received request from {}: '{}'.",
-                                client_addr,
-                                String::from_utf8_lossy(&buffer)
-                            );
+                            println!("Received request from {}: '{}'.", client_addr, String::from_utf8_lossy(&buffer));
                             match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
-                                    todo!();
+                                    dbg!(request);
                                 }
                                 Err(e) => println!("Error: Failed to parse the request. Details: {}", e),
                             }
                         }
-                        Err(e) => {
-                            println!("Error: Failed to read from conn. Details: {}", e);
-                        }
+                        Err(e) => println!("Error: Failed to read from conn. Details: {}", e),
                     }
                 }
-                Err(err) => {
-                    println!("Error: Cannot establish connection. Details: {}", err);
-                }
+                Err(err) => println!("Error: Cannot establish connection. Details: {}", err),
             }
         }
     }
