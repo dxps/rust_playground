@@ -1,3 +1,4 @@
+# Simple Rust-based HTTP Server
 
+This project showcases a couple of Rust's features.
 
-TODO: Check rustfmt option: when curly braces can remain in one line?
