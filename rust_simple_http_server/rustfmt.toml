@@ -1,5 +1,6 @@
 
 
-max_width = 137
+fn_call_width = 107
+max_width = 157
 struct_field_align_threshold = 20
 struct_lit_width = 36

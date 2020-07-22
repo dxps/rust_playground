@@ -1,7 +1,18 @@
-use crate::http::{Request, Response, StatusCode};
+use crate::http::{ParseError, Request, Response, StatusCode};
 use std::convert::TryFrom;
 use std::io::Read;
 use std::net::TcpListener;
+
+pub trait Handler {
+    fn handle_request(&mut self, request: &Request) -> Response;
+
+    fn handle_bad_request(&mut self, err: &ParseError) -> Response {
+        // This is the default implementation. Of course,
+        // any implementer of this trait can override it.
+        println!("Error: Failed to parse request. Details: {}", err);
+        Response::new(StatusCode::BadRequest, None)
+    }
+}
 
 pub struct Server {
     addr: String,
@@ -11,7 +22,7 @@ impl Server {
     pub fn new(addr: String) -> Self {
         Self { addr }
     }
-    pub fn run(self) {
+    pub fn run(self, mut handler: impl Handler) {
         println!("Listening on {}", self.addr);
         let listener = match TcpListener::bind(&self.addr) {
             Ok(listener) => listener,
@@ -30,14 +41,8 @@ impl Server {
                         Ok(_) => {
                             println!("Received request from {}: '{}'.", client_addr, String::from_utf8_lossy(&buffer));
                             let response = match Request::try_from(&buffer[..]) {
-                                Ok(request) => {
-                                    dbg!(request);
-                                    Response::new(StatusCode::Ok, Some("<h1>It Works!</h1>".to_string()))
-                                }
-                                Err(e) => {
-                                    println!("Error: Failed to parse the request. Details: {}", e);
-                                    Response::new(StatusCode::BadRequest, None)
-                                }
+                                Ok(request) => handler.handle_request(&request),
+                                Err(err) => handler.handle_bad_request(&err),
                             };
 
                             if let Err(e) = response.send(&mut stream) {

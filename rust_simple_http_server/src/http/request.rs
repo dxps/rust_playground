@@ -41,11 +41,7 @@ impl<'buf> TryFrom<&'buf [u8]> for Request<'buf> {
             path = &path[..i];
         }
 
-        Ok(Self {
-            path,
-            query_string,
-            method,
-        })
+        Ok(Self { path, query_string, method })
     }
 }
 
