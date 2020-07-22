@@ -12,6 +12,8 @@ pub trait Handler {
         println!("Error: Failed to parse request. Details: {}", err);
         Response::new(StatusCode::BadRequest, None)
     }
+
+    fn public_path(&self) -> &String;
 }
 
 pub struct Server {
@@ -23,7 +25,8 @@ impl Server {
         Self { addr }
     }
     pub fn run(self, mut handler: impl Handler) {
-        println!("Listening on {}", self.addr);
+        println!("Serving files from {} ...", handler.public_path());
+        println!("Listening on {} ...", self.addr);
         let listener = match TcpListener::bind(&self.addr) {
             Ok(listener) => listener,
             Err(error) => {
