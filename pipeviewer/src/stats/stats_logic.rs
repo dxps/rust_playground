@@ -1,4 +1,5 @@
-use crate::stats::timer::Timer;
+// use crate::stats::timer::Timer;
+use super::timer::Timer;
 use crossbeam::channel::Receiver;
 use crossterm::{
     cursor, execute,
@@ -58,5 +59,18 @@ impl TimeOutput for u64 {
         let (hours, left) = (*self / 3600, *self % 3600);
         let (minutes, seconds) = (left / 60, left % 60);
         format!("{}:{:02}:{:02}", hours, minutes, seconds)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::TimeOutput;
+
+    #[test]
+    fn as_time_format() {
+        let pairs = vec![(5_u64, "0:00:05"), (80_u64, "0:01:20"), (3607_u64, "1:00:07")];
+        for (input, output) in pairs {
+            assert_eq!(input.as_time().as_str(), output);
+        }
     }
 }

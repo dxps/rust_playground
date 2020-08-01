@@ -2,7 +2,7 @@
 # Options taken from https://github.com/rust-lang/rustfmt/blob/master/Configurations.md
 
 brace_style = "AlwaysNextLine"
-max_width = 150
+max_width = 130
 merge_imports = true
 reorder_impl_items = true
 tab_spaces = 4
