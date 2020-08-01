@@ -1,3 +1,5 @@
+//! **pipeviewer** library documentation
+
 // The library modules, exposed for external (outside of the library) usage.
 pub mod args; // for argument parsing
 pub mod read; // for reading of the data

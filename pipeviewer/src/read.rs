@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
 
 /// This function reads from the provided ref to the input file.
-/// It just signals if an error has occured (that's why the `std::io::Result`),
+/// It just signals if an error has occurred (that's why the `std::io::Result`),
 /// otherwise, it does not return a value (see `()` unit).
 pub fn read_loop(infile: &str, stats_tx: Sender<usize>, write_tx: Sender<Vec<u8>>) -> Result<()> {
     let mut reader: Box<dyn Read> = if !infile.is_empty() {

@@ -9,6 +9,23 @@ use crossterm::{
 use std::io::{self, Result, Stderr, Write};
 use std::time::Instant;
 
+/// `stats_loop` function measures and output the statistics based on the number of bytes
+/// that it receives through the provided `stats_rx` channel.
+///
+/// ## Example
+/// Here is an example of how to use it.
+///
+/// ```rust
+/// use std::thread;
+/// use crossbeam::unbounded;
+/// use pipeviewer::stats::stats_loop;
+/// let silent = true;
+/// let (stats_tx, stats_rx) = unbounded();
+/// let stats_handle = thread::spawn(move || stats_loop(silent, stats_rx));
+/// stats_tx.send(5);
+/// stats_tx.send(0);
+/// stats_handle.join();
+/// ```
 pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     let mut total_bytes = 0;
     let start = Instant::now();
@@ -50,6 +67,7 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
     let _ = stderr.flush();
 }
 
+/// The `TimeOutput` trait adds a `.as_time()` method to `u64`.
 trait TimeOutput {
     fn as_time(&self) -> String;
 }

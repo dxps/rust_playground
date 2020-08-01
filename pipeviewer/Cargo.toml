@@ -4,6 +4,15 @@ version = "0.1.0"
 authors = ["devisions <marius.ileana@gmail.com>"]
 edition = "2018"
 
+# Info needed for publishing this to crates.io
+description = "Educational version of pv utility, made by Nathan Stocks for his 'Hands-On System Programming with Rust' video course."
+homepage = "https://github.com/devisions/rust_playground/tree/master/pipeviewer"
+repository = "https://github.com/devisions/rust_playground/tree/master/pipeviewer"
+readme = "readme.md"
+keywords = [ "educational" ]
+categories = [ "command-line utilities" ]
+license = "MIT"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
