@@ -1,0 +1,9 @@
+
+# Options taken from https://github.com/rust-lang/rustfmt/blob/master/Configurations.md
+
+brace_style = "AlwaysNextLine"
+max_width = 150
+merge_imports = true
+reorder_impl_items = true
+tab_spaces = 4
+use_field_init_shorthand = true
