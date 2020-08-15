@@ -27,6 +27,28 @@ The standard `cargo run` starts the Warp server, does the startup initialization
 
 ## Usage
 
-Check health using `curl -v http://localhost:8000/health`
+### Check health
+
+Using `curl -v http://localhost:8000/health`
+
+### Get all todos
+
+Using `curl -X GET 'http://localhost:8000/todo/' -H 'Content-Type: application/json'`
+
+### Search todos by name
+
+Using `curl -X GET 'http://localhost:8000/todo/?search=Done%20Todo' -H 'Content-Type: application/json`
+
+### Add todo
+
+Using `curl -X POST 'http://localhost:8000/todo/' -H 'Content-Type: application/json' -d '{"name": "Done Todo"}'`
+
+### Update todo
+
+Using `curl -X PUT 'http://localhost:8000/todo/2' -H 'Content-Type: application/json' -d '{"name": "Done Todo", "checked": true}'`
+
+### Delete todo
+
+Using `curl -v -X DELETE 'http://localhost:8000/todo/2' -H 'Content-Type: application/json'`
 
 <br/>
