@@ -19,6 +19,8 @@
 
 Use `run_db.sh` script to start a local Docker container of PostgreSQL 12.
 
+Note that the container startup includes the `--rm` flag that does the cleanup (it removes the container and associated storage space) at container stop.
+
 ### The Server
 
 The standard `cargo run` starts the Warp server, does the startup initialization, and mounts the routes. The server listens on `localhost:8000`.
