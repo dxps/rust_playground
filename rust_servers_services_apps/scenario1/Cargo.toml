@@ -1,0 +1,9 @@
+[workspace]
+name = "scenario1"
+version = "0.1.0"
+authors = ["dxps <marius.ileana@gmail.com>"]
+edition = "2018"
+
+members = [
+    "tcpserver", "tcpclient", "http", "httpserver"
+]
