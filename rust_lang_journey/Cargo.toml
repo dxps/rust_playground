@@ -4,11 +4,17 @@ version = "0.1.0"
 authors = ["devisions <marius.ileana@gmail.com>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
 
 [[bin]]
 name = "borrowing_ex1"
 path = "src/borrowing_ex1.rs"
+
+[[bin]]
+name = "structs_ex1"
+path = "src/structs_ex1.rs"
+
+[[bin]]
+name = "macros_ex1"
+path = "src/macros_ex1.rs"
