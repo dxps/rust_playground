@@ -18,3 +18,7 @@ path = "src/structs_ex1.rs"
 [[bin]]
 name = "macros_ex1"
 path = "src/macros_ex1.rs"
+
+[[bin]]
+name = "ownership_ex1"
+path = "src/ownership_ex1.rs"
