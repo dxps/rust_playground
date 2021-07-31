@@ -1,16 +1,17 @@
+use serde::{Deserialize, Serialize};
 use std::{
+    collections::HashMap,
     io::{Error, ErrorKind},
     str::FromStr,
 };
-
-use serde::Serialize;
 use warp::{
     hyper::{Method, StatusCode},
+    query,
     reject::Reject,
     Filter, Rejection, Reply,
 };
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 struct Question {
     id: QuestionId,
     title: String,
@@ -18,24 +19,7 @@ struct Question {
     tags: Option<Vec<String>>,
 }
 
-impl Question {
-    fn new(id: QuestionId, title: String, content: String, tags: Option<Vec<String>>) -> Self {
-        Question {
-            id,
-            title,
-            content,
-            tags,
-        }
-    }
-}
-
-/// A custom error type that reflects the invalid question id.
-#[derive(Debug)]
-struct InvalidId;
-
-impl Reject for InvalidId {}
-
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Hash)]
 struct QuestionId(String);
 
 impl FromStr for QuestionId {
@@ -50,35 +34,44 @@ impl FromStr for QuestionId {
 }
 
 // ------------------------------
-//  HANDLERS
-// ------------------------------
+/// A local store for questions.
+#[derive(Clone)]
+struct Store {
+    questions: HashMap<QuestionId, Question>,
+}
 
-async fn get_questions() -> Result<impl warp::Reply, warp::Rejection> {
-    let question = Question::new(
-        QuestionId::from_str("1").expect("No id provided"),
-        "First question".to_string(),
-        "Content of the question".to_string(),
-        Some(vec!["faq".to_string()]),
-    );
+impl Store {
+    fn new() -> Self {
+        Store {
+            questions: Self::load(),
+        }
+    }
 
-    match question.id.0.is_empty() {
-        true => Err(warp::reject::custom(InvalidId)),
-        false => Ok(warp::reply::json(&question)),
+    fn load() -> HashMap<QuestionId, Question> {
+        let file = include_str!("../questions.json");
+        serde_json::from_str(file).expect("cannot read questions.json")
+    }
+
+    fn add(&mut self, question: &Question) -> &mut Self {
+        self.questions.insert(question.id.clone(), question.clone());
+        self
     }
 }
 
+// ------------------------------
+//  HANDLERS
+// ------------------------------
+
+async fn get_questions(store: Store) -> Result<impl warp::Reply, warp::Rejection> {
+    let res: Vec<Question> = store.questions.values().cloned().collect();
+    Ok(warp::reply::json(&res))
+}
+
 async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
-    if let Some(InvalidId) = r.find() {
-        Ok(warp::reply::with_status(
-            "No valid ID presented",
-            StatusCode::UNPROCESSABLE_ENTITY,
-        ))
-    } else {
-        Ok(warp::reply::with_status(
-            "Route not found",
-            StatusCode::NOT_FOUND,
-        ))
-    }
+    Ok(warp::reply::with_status(
+        "Route not found",
+        StatusCode::NOT_FOUND,
+    ))
 }
 
 // -----------
@@ -87,6 +80,10 @@ async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
 
 #[tokio::main]
 async fn main() {
+    let store = Store::new();
+
+    let store_filter = warp::any().map(move || store.clone());
+
     let cors = warp::cors()
         .allow_any_origin()
         .allow_header("content-type")
@@ -95,6 +92,7 @@ async fn main() {
     let get_questions_filter = warp::get()
         .and(warp::path("questions"))
         .and(warp::path::end())
+        .and(store_filter)
         .and_then(get_questions)
         .recover(return_error);
 

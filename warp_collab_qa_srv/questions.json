@@ -1,0 +1,10 @@
+{
+  "Q0001": {
+    "id": "Q0001",
+    "title": "First question ever asked",
+    "content": "How does this work?",
+    "tags": ["general"],
+    "comments": ["CI001"],
+    "upvotes": null
+  }
+}
