@@ -9,7 +9,7 @@ use warp::{
     Filter, Rejection, Reply,
 };
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 struct Question {
     id: QuestionId,
     title: String,
@@ -20,17 +20,26 @@ struct Question {
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Hash)]
 struct QuestionId(String);
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct Answer {
+    id: String,
+    content: String,
+    question_id: String,
+}
+
 // ------------------------------
 /// A local store for questions.
 #[derive(Clone)]
 struct Store {
     questions: Arc<RwLock<HashMap<QuestionId, Question>>>,
+    answers: Arc<RwLock<HashMap<String, Answer>>>,
 }
 
 impl Store {
     fn new() -> Self {
         Store {
             questions: Arc::new(RwLock::new(Self::load())),
+            answers: Arc::new(RwLock::new(HashMap::new())),
         }
     }
 
@@ -138,6 +147,22 @@ async fn delete_question_handler(
     }
 }
 
+async fn add_answer_handler(
+    store: Store,
+    params: HashMap<String, String>,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    let answer = Answer {
+        id: "CI001".to_string(),
+        content: params.get("content").unwrap().to_string(),
+        question_id: params.get("questionId").unwrap().to_string(),
+    };
+
+    store.answers.write().insert(answer.id.clone(), answer);
+
+    Ok(warp::reply::with_status("Answer added", StatusCode::OK))
+}
+
+// -----------
 /// The common handler that is called to recover from errors.
 async fn return_error_handler(r: Rejection) -> Result<impl Reply, Rejection> {
     println!("return_error: got r={:?}", r);
@@ -215,10 +240,18 @@ async fn main() {
         .and(store_filter.clone())
         .and_then(delete_question_handler);
 
+    let add_answer = warp::post()
+        .and(warp::path("answers"))
+        .and(warp::path::end())
+        .and(store_filter.clone())
+        .and(warp::body::form())
+        .and_then(add_answer_handler);
+
     let routes = get_questions
         .or(add_question)
         .or(update_question)
         .or(delete_question)
+        .or(add_answer)
         .with(cors)
         .recover(return_error_handler);
 
