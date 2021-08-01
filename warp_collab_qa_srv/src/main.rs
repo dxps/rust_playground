@@ -1,12 +1,12 @@
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
-    io::{Error, ErrorKind},
-    str::FromStr,
+    sync::{Arc, RwLock},
 };
 use warp::{
+    body::BodyDeserializeError,
+    cors::CorsForbidden,
     hyper::{Method, StatusCode},
-    query,
     reject::Reject,
     Filter, Rejection, Reply,
 };
@@ -22,28 +22,17 @@ struct Question {
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq, Hash)]
 struct QuestionId(String);
 
-impl FromStr for QuestionId {
-    type Err = Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.is_empty() {
-            false => Ok(QuestionId(s.to_string())),
-            true => Err(Error::new(ErrorKind::InvalidInput, "No id provided")),
-        }
-    }
-}
-
 // ------------------------------
 /// A local store for questions.
 #[derive(Clone)]
 struct Store {
-    questions: HashMap<QuestionId, Question>,
+    questions: Arc<RwLock<HashMap<QuestionId, Question>>>,
 }
 
 impl Store {
     fn new() -> Self {
         Store {
-            questions: Self::load(),
+            questions: Arc::new(RwLock::new(Self::load())),
         }
     }
 
@@ -53,25 +42,102 @@ impl Store {
     }
 
     fn add(&mut self, question: &Question) -> &mut Self {
-        self.questions.insert(question.id.clone(), question.clone());
+        self.questions
+            .write()
+            .unwrap()
+            .insert(question.id.clone(), question.clone());
         self
     }
 }
+
+// --------------------
+#[derive(Debug)]
+struct Pagination {
+    start: usize,
+    end: usize,
+}
+
+fn extract_pagination(params: HashMap<String, String>) -> Result<Pagination, Error> {
+    if params.contains_key("start") && params.contains_key("end") {
+        return Ok(Pagination {
+            start: params
+                .get("start")
+                .unwrap()
+                .parse::<usize>()
+                .map_err(Error::ParseError)?,
+            end: params
+                .get("end")
+                .unwrap()
+                .parse()
+                .map_err(Error::ParseError)?,
+        });
+    }
+    Err(Error::MissingParameters)
+}
+
+// --------------------
+//  Custom Error enum
+#[derive(Debug)]
+enum Error {
+    ParseError(std::num::ParseIntError),
+    MissingParameters,
+    QuestionNotFound,
+}
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Error::ParseError(err) => write!(f, "Cannot parse parameter: {}", err),
+            Error::MissingParameters => write!(f, "Missing parameter"),
+            Error::QuestionNotFound => write!(f, "Question not found"),
+        }
+    }
+}
+
+impl Reject for Error {}
 
 // ------------------------------
 //  HANDLERS
 // ------------------------------
 
-async fn get_questions(store: Store) -> Result<impl warp::Reply, warp::Rejection> {
-    let res: Vec<Question> = store.questions.values().cloned().collect();
-    Ok(warp::reply::json(&res))
+async fn get_questions(
+    params: HashMap<String, String>,
+    store: Store,
+) -> Result<impl warp::Reply, warp::Rejection> {
+    if !params.is_empty() {
+        let pagination = extract_pagination(params)?;
+        let res: Vec<Question> = store.questions.read().unwrap().values().cloned().collect();
+        let res = &res[pagination.start..pagination.end];
+        Ok(warp::reply::json(&res))
+    } else {
+        let res: Vec<Question> = store.questions.read().unwrap().values().cloned().collect();
+        Ok(warp::reply::json(&res))
+    }
 }
 
 async fn return_error(r: Rejection) -> Result<impl Reply, Rejection> {
-    Ok(warp::reply::with_status(
-        "Route not found",
-        StatusCode::NOT_FOUND,
-    ))
+    println!("{:?}", r);
+    if let Some(error) = r.find::<Error>() {
+        Ok(warp::reply::with_status(
+            error.to_string(),
+            StatusCode::RANGE_NOT_SATISFIABLE,
+        ))
+    } else if let Some(error) = r.find::<CorsForbidden>() {
+        Ok(warp::reply::with_status(
+            error.to_string(),
+            StatusCode::FORBIDDEN,
+        ))
+    } else if let Some(error) = r.find::<BodyDeserializeError>() {
+        Ok(warp::reply::with_status(
+            error.to_string(),
+            StatusCode::UNPROCESSABLE_ENTITY,
+        ))
+    } else {
+        Ok(warp::reply::with_status(
+            "Route not found".to_string(),
+            StatusCode::NOT_FOUND,
+        ))
+    }
 }
 
 // -----------
@@ -92,6 +158,7 @@ async fn main() {
     let get_questions_filter = warp::get()
         .and(warp::path("questions"))
         .and(warp::path::end())
+        .and(warp::query())
         .and(store_filter)
         .and_then(get_questions)
         .recover(return_error);
