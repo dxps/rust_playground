@@ -23,12 +23,11 @@ pub fn show_hashmap() {
     let mut hm = HashMap::new();
     let user1_uid = "uid-123"; // this is an &str, so no movement happens
     let _user2_uid = String::from("uid-123"); // but this String would be moved
-    // so we won't be able to use it later
+                                              // so we won't be able to use it later
     hm.insert(user1_uid, String::from("user-1"));
     hm.insert("uid-456", String::from("user-2"));
     println!("Added uid: {:?} to hm = {:?}", user1_uid, hm);
 }
-
 
 pub fn show_linkedlist() {
     println!("\n---------- linked list ----------\n");
