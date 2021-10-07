@@ -1,21 +1,25 @@
 [package]
+authors = ["dxps <marius.ileana@gmail.com>"]
+edition = "2018"
 name = "rust_concurrency"
 version = "0.1.0"
-authors = ["devisions <marius.ileana@gmail.com>"]
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+crossbeam-channel = "0.5.1"
+parking_lot = "0.11.2"
 
 [[bin]]
 name = "spawning_a_thread"
-path = "src/spawning_a_thread.rs"
+path = "src/bin/spawning_a_thread.rs"
 
 [[bin]]
 name = "msg_pass_thread"
-path = "src/msg_pass_thread.rs"
+path = "src/bin/msg_pass_thread.rs"
 
 [[bin]]
 name = "sharing_ownership_threads"
-path = "src/sharing_ownership_threads.rs"
+path = "src/bin/sharing_ownership_threads.rs"
+
+[[bin]]
+name = "arc_mutex_ex1"
+path = "src/bin/arc_mutex_ex1.rs"
