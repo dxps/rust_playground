@@ -1,5 +1,6 @@
 use derive_more::{Display, From};
 use serde::{Deserialize, Serialize};
+use sqlx::{Database, Sqlite};
 use std::str::FromStr;
 use uuid::Uuid;
 
@@ -29,3 +30,15 @@ impl FromStr for DbId {
         Ok(DbId(Uuid::parse_str(s)?))
     }
 }
+
+#[derive(Debug, thiserror::Error)]
+pub enum DataError {
+    #[error("database error: {0}")]
+    Database(#[from] sqlx::Error),
+}
+
+pub type AppDatabase = Database<Sqlite>;
+pub type DatabasePool = sqlx::sqlite::SqlitePool;
+pub type Transaction<'t> = sqlx::Transaction<'t, Sqlite>;
+pub type AppDatabaseRow = sqlx::sqlite::SqliteRow;
+pub type AppqueryResult = sqlx::sqlite::SqliteQueryResult;
