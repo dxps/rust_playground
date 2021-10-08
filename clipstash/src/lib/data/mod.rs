@@ -1,6 +1,9 @@
+// Including "model" in the module tree.
+pub mod model;
+
 use derive_more::{Display, From};
 use serde::{Deserialize, Serialize};
-use sqlx::{Database, Sqlite};
+use sqlx::Sqlite;
 use std::str::FromStr;
 use uuid::Uuid;
 
@@ -25,7 +28,6 @@ impl Default for DbId {
 
 impl FromStr for DbId {
     type Err = uuid::Error;
-
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(DbId(Uuid::parse_str(s)?))
     }
@@ -36,6 +38,8 @@ pub enum DataError {
     #[error("database error: {0}")]
     Database(#[from] sqlx::Error),
 }
+
+pub struct Database<D: sqlx::Database>(sqlx::Pool<D>);
 
 pub type AppDatabase = Database<Sqlite>;
 pub type DatabasePool = sqlx::sqlite::SqlitePool;
