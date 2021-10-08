@@ -1,4 +1,4 @@
-use super::ClipError;
+use crate::domain::clip::ClipError;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
@@ -13,7 +13,7 @@ impl Password {
                 if !password.trim().is_empty() {
                     Ok(Self(Some(password)))
                 } else {
-                    Self(None)
+                    Ok(Self(None))
                 }
             }
             None => Ok(Self(None)),
