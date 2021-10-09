@@ -1,9 +1,11 @@
 // Including these modules in the module tree.
+pub mod clip;
 pub mod database;
 pub mod dbid;
-pub mod model;
 pub mod query;
+
 // And reexporting for shorter use path.
+pub use clip::Clip;
 pub use database::{DataError, Database};
 pub use dbid::DbId;
 

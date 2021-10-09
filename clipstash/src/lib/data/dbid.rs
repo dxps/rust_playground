@@ -29,3 +29,9 @@ impl FromStr for DbId {
         Ok(DbId(Uuid::parse_str(s)?))
     }
 }
+
+impl From<DbId> for String {
+    fn from(dbid: DbId) -> Self {
+        format!("{}", dbid.0)
+    }
+}

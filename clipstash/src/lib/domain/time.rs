@@ -14,6 +14,10 @@ impl Time {
     pub fn from_naive_utc(datetime: NaiveDateTime) -> Self {
         Time(DateTime::from_utc(datetime, Utc))
     }
+
+    pub(crate) fn timestamp(&self) -> i64 {
+        self.0.timestamp()
+    }
 }
 
 impl FromStr for Time {
