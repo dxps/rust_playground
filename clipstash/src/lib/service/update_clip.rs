@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 
 use crate::{
-    data::{query, DatabasePool},
+    data::{self, DatabasePool},
     domain::clip::field,
     service, Clip, ServiceError,
 };
@@ -21,5 +21,5 @@ pub async fn update_clip(
     req: service::UpdateClip,
     pool: &DatabasePool,
 ) -> Result<Clip, ServiceError> {
-    Ok(query::update_clip(req, pool).await?.try_into()?)
+    Ok(data::update_clip(req, pool).await?.try_into()?)
 }

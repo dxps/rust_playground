@@ -3,7 +3,7 @@ use std::convert::TryInto;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{query, DatabasePool},
+    data::{self, DatabasePool},
     domain::clip::field::Password,
     Clip, ServiceError, ShortCode,
 };
@@ -40,7 +40,7 @@ impl From<&str> for GetClip {
 
 pub async fn get_clip(req: GetClip, pool: &DatabasePool) -> Result<Clip, ServiceError> {
     let password = req.password.clone();
-    let clip: Clip = query::get_clip(req, pool).await?.try_into()?;
+    let clip: Clip = data::get_clip(req, pool).await?.try_into()?;
     if clip.password.has_password() {
         if clip.password == password {
             Ok(clip)
