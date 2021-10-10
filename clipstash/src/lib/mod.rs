@@ -3,7 +3,6 @@ pub mod domain;
 pub mod service;
 pub mod web;
 
-use data::AppDatabase;
 // Reexporting some types to have them accessible from here
 // instead of having to go deeper into the domain model.
 pub use data::DataError;
@@ -14,6 +13,7 @@ use rocket::fs::FileServer;
 use rocket::{Build, Rocket};
 pub use service::ServiceError;
 
+use data::AppDatabase;
 use web::renderer::Renderer;
 
 pub struct RocketConfig {

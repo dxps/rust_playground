@@ -1,5 +1,6 @@
 use crate::domain::clip::ClipError;
 use derive_more::From;
+use rocket::request::FromParam;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
@@ -54,5 +55,12 @@ impl FromStr for ShortCode {
     type Err = ClipError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(s.into())
+    }
+}
+
+impl<'r> FromParam<'r> for ShortCode {
+    type Error = &'r str;
+    fn from_param(param: &'r str) -> Result<Self, Self::Error> {
+        Ok(ShortCode::from(param))
     }
 }
