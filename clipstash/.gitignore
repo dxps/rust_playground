@@ -1,3 +1,6 @@
 /target
 *.db*
 Cargo.lock
+
+.idea
+

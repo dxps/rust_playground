@@ -1,4 +1,5 @@
 use crate::domain::{clip::ClipError, time::Time};
+use rocket::form::{self, FromFormField, ValueField};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
@@ -31,6 +32,18 @@ impl FromStr for Expires {
                 Ok(time) => Ok(Self::new(time)),
                 Err(e) => Err(e.into()),
             }
+        }
+    }
+}
+
+#[rocket::async_trait]
+impl<'r> FromFormField<'r> for Expires {
+    fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
+        if field.value.trim().is_empty() {
+            Ok(Self(None))
+        } else {
+            Ok(Self::from_str(field.value)
+                .map_err(|err| form::Error::validation(format!("{}", err)))?)
         }
     }
 }
