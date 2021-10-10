@@ -3,7 +3,7 @@ use std::convert::TryInto;
 use crate::{
     data::{self, DatabasePool},
     domain::clip::field,
-    service, Clip, ServiceError,
+    Clip, ServiceError,
 };
 
 use serde::{Deserialize, Serialize};
@@ -17,9 +17,6 @@ pub struct UpdateClip {
     pub password: field::Password,
 }
 
-pub async fn update_clip(
-    req: service::UpdateClip,
-    pool: &DatabasePool,
-) -> Result<Clip, ServiceError> {
+pub async fn update_clip(req: UpdateClip, pool: &DatabasePool) -> Result<Clip, ServiceError> {
     Ok(data::update_clip(req, pool).await?.try_into()?)
 }

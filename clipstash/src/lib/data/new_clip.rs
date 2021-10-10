@@ -36,7 +36,7 @@ pub async fn new_clip<M: Into<NewClip>>(model: M, pool: &DatabasePool) -> Result
     let _ = sqlx::query!(
         r#"INSERT INTO clips (
               clip_id, shortcode, content, title, posted, expires, password, hits)
-           VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         "#,
         model.clip_id,
         model.shortcode,
