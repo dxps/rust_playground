@@ -11,6 +11,6 @@ pub struct NewClip {
 }
 
 #[derive(Debug, Serialize, FromForm)]
-pub struct PasswordProtectedClip {
+pub struct GetPasswordProtectedClip {
     pub password: field::Password,
 }

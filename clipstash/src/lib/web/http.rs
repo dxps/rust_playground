@@ -1,10 +1,10 @@
-use crate::data::AppDatabase;
-use crate::web::ctx;
-use crate::web::ctx::Home;
+use crate::data::{clip, AppDatabase};
+use crate::web::forms::GetPasswordProtectedClip;
 use crate::web::renderer::Renderer;
+use crate::web::{ctx, PASSWORD_COOKIE};
 use crate::{service, ServiceError, ShortCode};
 use rocket::form::{Contextual, Form};
-use rocket::http::Status;
+use rocket::http::{Cookie, CookieJar, Status};
 use rocket::response::content::Html;
 use rocket::response::{status, Redirect};
 use rocket::{uri, State};
@@ -98,8 +98,48 @@ pub async fn new_clip(
     }
 }
 
+#[rocket::post("/clip/<shortcode>", data = "<form>")]
+pub async fn submit_clip_password(
+    cookies: &CookieJar<'_>,
+    form: Form<Contextual<'_, GetPasswordProtectedClip>>,
+    shortcode: ShortCode,
+    database: &State<AppDatabase>,
+    renderer: &State<Renderer<'_>>,
+) -> Result<Html<String>, PageError> {
+    if let Some(form) = &form.value {
+        let req = service::GetClip {
+            shortcode: shortcode.clone(),
+            password: form.password.clone(),
+        };
+        match service::get_clip(req, database.get_pool()).await {
+            Ok(clip) => {
+                let context = ctx::ViewClip::new(clip);
+                cookies.add(Cookie::new(
+                    PASSWORD_COOKIE,
+                    form.password.clone().into_inner().unwrap_or_default(),
+                ));
+                Ok(Html(renderer.render(context, &[])))
+            }
+            Err(e) => match e {
+                ServiceError::PermissionError(e) => {
+                    let context = ctx::PasswordRequired::new(shortcode);
+                    Ok(Html(renderer.render(context, &[e.as_str()])))
+                }
+                ServiceError::NotFound => Err(PageError::NotFound("Clip not found.".to_owned())),
+                _ => Err(PageError::Internal("server error".to_owned())),
+            },
+        }
+    } else {
+        let context = ctx::PasswordRequired::new(shortcode);
+        Ok(Html(renderer.render(
+            context,
+            &["A password is required to view this clip."],
+        )))
+    }
+}
+
 pub fn routes() -> Vec<rocket::Route> {
-    rocket::routes![home, get_clip, new_clip]
+    rocket::routes![home, get_clip, new_clip, submit_clip_password]
 }
 
 pub mod catcher {
