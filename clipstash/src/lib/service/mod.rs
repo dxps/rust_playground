@@ -4,6 +4,6 @@ pub mod service_error;
 pub mod update_clip;
 
 pub use get_clip::{get_clip, GetClip};
-pub use new_clip::NewClip;
+pub use new_clip::{new_clip, NewClip};
 pub use service_error::ServiceError;
 pub use update_clip::UpdateClip;
