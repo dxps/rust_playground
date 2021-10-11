@@ -138,8 +138,34 @@ pub async fn submit_clip_password(
     }
 }
 
+#[rocket::get("/clip/raw/<shortcode>")]
+pub async fn get_raw_clip(
+    cookies: &CookieJar<'_>,
+    shortcode: &str,
+    database: &State<AppDatabase>,
+) -> Result<status::Custom<String>, Status> {
+    use crate::domain::clip::field::Password;
+    let req = service::GetClip {
+        shortcode: shortcode.into(),
+        password: cookies
+            .get(PASSWORD_COOKIE)
+            .map(|cookie| cookie.value())
+            .map(|raw_passwd| Password::new(raw_passwd.to_string()).ok())
+            .flatten()
+            .unwrap_or_else(Password::default),
+    };
+    match service::get_clip(req, database.get_pool()).await {
+        Ok(clip) => Ok(status::Custom(Status::Ok, clip.content.into_inner())),
+        Err(e) => match e {
+            ServiceError::PermissionError(msg) => Ok(status::Custom(Status::Unauthorized, msg)),
+            ServiceError::NotFound => Err(Status::NotFound),
+            _ => Err(Status::InternalServerError),
+        },
+    }
+}
+
 pub fn routes() -> Vec<rocket::Route> {
-    rocket::routes![home, get_clip, new_clip, submit_clip_password]
+    rocket::routes![home, get_clip, new_clip, submit_clip_password, get_raw_clip]
 }
 
 pub mod catcher {
