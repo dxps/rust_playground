@@ -1,4 +1,5 @@
 pub mod get_clip;
+pub mod hit_count;
 pub mod new_clip;
 pub mod service_error;
 pub mod update_clip;
