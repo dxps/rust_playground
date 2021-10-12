@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use crate::{
     data::{self, DatabasePool},
-    service, ServiceError, ShortCode,
+    ServiceError, ShortCode,
 };
 use crossbeam_channel::{unbounded, Sender};
 use parking_lot::Mutex;

@@ -11,7 +11,7 @@ pub enum ServiceError {
     #[error("not found")]
     NotFound,
 
-    #[error("permission error: {0}")]
+    #[error("permissions not met: {0}")]
     PermissionError(String),
 }
 
