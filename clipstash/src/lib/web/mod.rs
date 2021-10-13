@@ -1,3 +1,4 @@
+pub mod api;
 pub mod ctx;
 pub mod forms;
 pub mod hit_count;

@@ -1,4 +1,5 @@
 // Including in the module tree.
+pub mod api_key;
 pub mod clip;
 pub mod database;
 pub mod dbid;
@@ -9,6 +10,7 @@ pub mod transaction;
 pub mod update_clip;
 
 // Reexporting.
+pub use api_key::*;
 pub use clip::Clip;
 pub use database::{DataError, Database};
 pub use dbid::DbId;
