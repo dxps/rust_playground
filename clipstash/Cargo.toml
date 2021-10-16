@@ -16,11 +16,13 @@ dotenv = "0.15"
 handlebars = {version = "4", features = ["dir_source"]}
 parking_lot = "0.11"
 rand = "0.8"
+reqwest = {version = "0.11", features = ["blocking", "json", "cookies"]}
 rocket = {version = "0.5.0-rc.1", features = ["json"]}
 serde = {version = "1", features = ["derive"]}
 serde_json = "1"
 sqlx = {version = "0.5", features = ["sqlite", "runtime-tokio-rustls", "macros", "chrono", "uuid"]}
 structopt = "0.3"
+strum = {version = "0.22", features = ["derive"]}
 thiserror = "1"
 tokio = {version = "1.8.0"}
 uuid = {version = "0.8", features = ["serde", "v4"]}
