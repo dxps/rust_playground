@@ -29,6 +29,8 @@ pub fn rocket(config: RocketConfig) -> Rocket<Build> {
         .manage::<Renderer>(config.renderer)
         .manage::<HitCounter>(config.hit_counter)
         .mount("/", web::http::routes())
+        .mount("/api/clip", web::api::routes())
         .mount("/static", FileServer::from("static"))
         .register("/", web::http::catcher::catchers())
+        .register("/api/clip", web::api::catcher::catchers())
 }

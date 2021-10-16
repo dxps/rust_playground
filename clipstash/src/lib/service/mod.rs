@@ -10,4 +10,4 @@ pub use api_key::*;
 pub use get_clip::{get_clip, GetClip};
 pub use new_clip::{new_clip, NewClip};
 pub use service_error::ServiceError;
-pub use update_clip::UpdateClip;
+pub use update_clip::{update_clip, UpdateClip};
