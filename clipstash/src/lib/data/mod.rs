@@ -5,6 +5,7 @@ pub mod database;
 pub mod dbid;
 pub mod get_clip;
 pub mod hit_count;
+pub mod maintenance;
 pub mod new_clip;
 pub mod transaction;
 pub mod update_clip;
