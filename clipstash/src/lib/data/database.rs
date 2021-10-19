@@ -35,3 +35,24 @@ pub enum DataError {
     #[error("database error: {0}")]
     Database(#[from] sqlx::Error),
 }
+
+#[cfg(test)]
+pub mod test {
+    use tokio::runtime::Handle;
+
+    use crate::data::{AppDatabase, Database};
+
+    /// A testing helper for creating a database.
+    pub fn new_db(handle: &Handle) -> AppDatabase {
+        use sqlx::migrate::Migrator;
+        use std::path::Path;
+
+        handle.block_on(async move {
+            let db = Database::new(":memory:").await;
+            let migrator = Migrator::new(Path::new("./migrations")).await.unwrap();
+            let pool = db.get_pool();
+            migrator.run(pool).await.unwrap();
+            db
+        })
+    }
+}

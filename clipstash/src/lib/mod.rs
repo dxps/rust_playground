@@ -37,3 +37,10 @@ pub fn rocket(config: RocketConfig) -> Rocket<Build> {
         .register("/", web::http::catcher::catchers())
         .register("/api/clip", web::api::catcher::catchers())
 }
+
+#[cfg(test)]
+pub mod test {
+    pub fn async_runtime() -> tokio::runtime::Runtime {
+        tokio::runtime::Runtime::new().expect("failed to spawn tokio runtime")
+    }
+}
