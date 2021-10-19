@@ -202,3 +202,79 @@ pub mod catcher {
         catchers![not_found, default, internal_error]
     }
 }
+
+#[cfg(test)]
+pub mod test {
+    use crate::data::AppDatabase;
+    use crate::test::async_runtime;
+    use crate::web::test::client;
+    use rocket::http::Status;
+
+    #[test]
+    fn get_home() {
+        let client = client();
+        let resp = client.get("/").dispatch();
+        assert_eq!(resp.status(), Status::Ok);
+    }
+
+    #[test]
+    fn missing_clip() {
+        let client = client();
+        let resp = client.get("/clip/unknown-fake").dispatch();
+        assert_eq!(resp.status(), Status::NotFound);
+    }
+
+    #[test]
+    fn requires_password_when_applicable() {
+        use crate::domain::clip::field::{Content, Expires, Password, Title};
+        use crate::service;
+        use rocket::http::{ContentType, Cookie};
+
+        let rt = async_runtime();
+        let client = client();
+        let db = client.rocket().state::<AppDatabase>().unwrap();
+
+        let req = service::NewClip {
+            content: Content::new("content").unwrap(),
+            title: Title::default(),
+            expires: Expires::default(),
+            password: Password::new("123".to_owned()).unwrap(),
+        };
+
+        let clip = rt.block_on(async move { service::new_clip(req, db.get_pool()).await.unwrap() });
+
+        // Unauthorized access to clip when no password is provided.
+        let resp = client
+            .get(format!("/clip/{}", clip.shortcode.as_str()))
+            .dispatch();
+        assert_eq!(resp.status(), Status::Unauthorized);
+
+        // Unauthorized access to raw clip when no password cookie is provided.
+        let resp = client
+            .get(format!("/clip/raw/{}", clip.shortcode.as_str()))
+            .dispatch();
+        assert_eq!(resp.status(), Status::Unauthorized);
+
+        // Granted access to clip when password is provided.
+        let resp = client
+            .post(format!("/clip/{}", clip.shortcode.as_str()))
+            .header(ContentType::Form)
+            .body("password=123")
+            .dispatch();
+        assert_eq!(resp.status(), Status::Ok);
+
+        // Granted access to raw clip when password cookie is provided.
+        let resp = client
+            .get(format!("/clip/raw/{}", clip.shortcode.as_str()))
+            .cookie(Cookie::new("password", "123"))
+            .dispatch();
+        assert_eq!(resp.status(), Status::Ok);
+
+        // Unauthorized access to raw clip when password cookie is incorrect.
+        let resp = client
+            .get(format!("/clip/raw/{}", clip.shortcode.as_str()))
+            .cookie(Cookie::new("password", "456"))
+            .dispatch();
+        assert_eq!(resp.status(), Status::Unauthorized);
+    }
+}
