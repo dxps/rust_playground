@@ -1,0 +1,21 @@
+[package]
+name = "egui_demo_app"
+description = "egui Demo App"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+eframe = { version = "0.15.0" }
+egui_demo_lib = { version = "0.15.0", features = ["extra_debug_asserts"] }
+
+[features]
+default = ["persistence"]
+http = ["egui_demo_lib/http"]
+persistence = ["eframe/persistence", "egui_demo_lib/persistence"]
+screen_reader = ["eframe/screen_reader"]                          # experimental
+syntax_highlighting = ["egui_demo_lib/syntax_highlighting"]
