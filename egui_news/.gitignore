@@ -1,0 +1,5 @@
+
+
+## .env can contain sensitive settings
+## (such as API_KEY for accessing newsapi.org)
+.env

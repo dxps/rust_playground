@@ -1,0 +1,16 @@
+[package]
+name = "api_news"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+ureq = { version = "2.3.0", features = ["json"] }
+serde = { version = "1.0.130", features = ["derive"] }
+serde_json = "1.0.68"
+thiserror = "1.0.30"
+url = "2.2.2"
+reqwest = { version = "0.11.6", features = ["json"], optional = true }
+
+[features]
+async = ["reqwest"]
