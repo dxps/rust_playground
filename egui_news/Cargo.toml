@@ -1,14 +1,7 @@
-[package]
-edition = "2021"
-name = "egui_news"
-version = "0.1.0"
+[workspace]
 
-description = "A simple news reader app that uses egui for the GUI"
-license = "MIT"
-
-[dependencies]
-api_news = {path = "./api_news", features = ["async"]}
-crossterm = "0.21.0"
-dotenv = "0.15.0"
-termimad = {version = "0.16.4"}
-tokio = {version = "1.12.0", features = ["full"]}
+members = [
+  "api_news",
+  "ui_g",
+  "ui_t",
+]
