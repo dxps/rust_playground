@@ -1,12 +1,13 @@
-## Code for Chapter 3
+## EzyTutors
 
-### What does this repo contain?
+This workspace contains one member named `tutor-nodb` that has two binaries:
 
-#### This repo contains two projects - basic-server and tutor-service.
+- `basic-server`
+- `tutor-service`
 
-- For both projects, clone this repo and cd into the directory _ezytutors_. This is the workspace root folder.
+<br/>
 
-### How to test and run the basic-server
+### Using `basic-server`
 
 1. From one terminal window, run from workspace root:
 
@@ -23,10 +24,12 @@ http://localhost:3000/health
 You should see a web page displayed with the following message:
 
 ```
-"Hello. EzyTutors is alive and kicking"
+"Hello. EzyTutors is alive and kicking."
 ```
 
-### How to test and run the tutor-service project
+<br/>
+
+### Using `tutor-nodb`
 
 1. From a terminal window, run from workspace root:
 
@@ -54,7 +57,7 @@ localhost:3000/courses/1/1
 For the first URI, you should see a message similar to this. The visitor count will increment everytime you refresh the browser screen
 
 ```
-"I'm good. You've already asked me  1 times"
+"I'm good. You've already asked me 1 times"
 ```
 
 For the second URI, you should see the following:
