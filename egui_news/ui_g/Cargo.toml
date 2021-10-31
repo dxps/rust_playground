@@ -4,6 +4,7 @@ name = "ui_g"
 version = "0.1.0"
 
 [dependencies]
+api_news = {path = "../api_news", features = ["async"]}
 confy = "0.4.0"
 eframe = "0.15.0"
 serde = {version = "1.0.130", features = ["derive"]}

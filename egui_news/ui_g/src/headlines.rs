@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use eframe::{
     egui::{
         self, Align2, Button, Color32, CtxRef, Direction, FontDefinitions, FontFamily, Key, Label,
@@ -8,12 +6,20 @@ use eframe::{
     epi,
 };
 use serde::{Deserialize, Serialize};
+use std::{
+    borrow::Cow,
+    sync::mpsc::{Receiver, SyncSender},
+};
 
 pub const PADDING: f32 = 5.0;
 const WHITE: Color32 = Color32::from_rgb(255, 255, 255);
 const BLACK: Color32 = Color32::from_rgb(0, 0, 0);
 const CYAN: Color32 = Color32::from_rgb(0, 255, 255);
 const RED: Color32 = Color32::from_rgb(255, 0, 0);
+
+pub enum AppMsg {
+    ApiKeyProvided(String),
+}
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct HeadlinesConfig {
@@ -34,21 +40,20 @@ pub struct Headlines {
     articles: Vec<NewsCardData>,
     pub config: HeadlinesConfig,
     pub api_key_inited: bool,
+    pub app_tx: Option<SyncSender<AppMsg>>,
+    pub news_rx: Option<Receiver<NewsCardData>>,
 }
 
 impl Headlines {
     pub fn new() -> Self {
         // temporary sample
-        let iter = (0..10).map(|a| NewsCardData {
-            title: format!("title {}", a),
-            desc: format!("desc {}", a),
-            url: format!("https://example.com/{}", a),
-        });
         let config: HeadlinesConfig = confy::load("headlines").unwrap_or_default();
         Headlines {
-            articles: Vec::from_iter(iter),
+            articles: vec![],
             api_key_inited: !config.api_key.is_empty(),
             config,
+            app_tx: None,
+            news_rx: None,
         }
     }
 
@@ -118,6 +123,7 @@ impl Headlines {
         let total = &self.articles.len();
         for (i, a) in (&self.articles).into_iter().enumerate() {
             ui.add_space(PADDING);
+
             // render title
             let title = format!("▶ {}", a.title);
             if self.config.dark_mode {
@@ -125,6 +131,7 @@ impl Headlines {
             } else {
                 ui.colored_label(BLACK, title);
             }
+
             // render desc
             ui.add_space(PADDING);
             let desc = Label::new(&a.desc).text_style(egui::TextStyle::Button);
@@ -136,6 +143,7 @@ impl Headlines {
             } else {
                 ui.style_mut().visuals.hyperlink_color = RED;
             }
+
             ui.add_space(PADDING);
             ui.with_layout(Layout::right_to_left(), |ui| {
                 ui.add(egui::Hyperlink::new(&a.url).text("more ⤴"));
@@ -162,15 +170,28 @@ impl Headlines {
                     }
                     tracing::info!("Saved config with API Key {}", self.config.api_key);
                     self.api_key_inited = true;
+                    if let Some(tx) = &self.app_tx {
+                        tx.send(AppMsg::ApiKeyProvided(self.config.api_key.to_string()))
+                            .unwrap_or_else(|e| tracing::error!("Failed tx api key: {}", e));
+                    }
                 }
                 ui.label("For getting your API Key head over to");
                 ui.hyperlink("https://newsapi.org");
             });
     }
+
+    pub(crate) fn preload_articles(&mut self) {
+        if let Some(rx) = &self.news_rx {
+            match rx.try_recv() {
+                Ok(news_data) => self.articles.push(news_data),
+                Err(_) => (),
+            }
+        }
+    }
 }
 
-struct NewsCardData {
-    title: String,
-    desc: String,
-    url: String,
+pub struct NewsCardData {
+    pub title: String,
+    pub desc: String,
+    pub url: String,
 }
