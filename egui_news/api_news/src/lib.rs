@@ -44,7 +44,7 @@ impl NewsAPIResponse {
 pub struct Article {
     title: String,
     url: String,
-    desc: Option<String>,
+    description: Option<String>,
 }
 
 impl Article {
@@ -53,7 +53,7 @@ impl Article {
     }
 
     pub fn desc(&self) -> Option<&String> {
-        self.desc.as_ref()
+        self.description.as_ref()
     }
 
     pub fn url(&self) -> &str {
