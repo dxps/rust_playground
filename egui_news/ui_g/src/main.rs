@@ -1,18 +1,18 @@
 mod headlines;
 
 use eframe::{
-    egui::{
-        CentralPanel, CtxRef, Hyperlink, Label, ScrollArea, Separator, TopBottomPanel, Ui, Vec2,
-    },
+    egui::{CentralPanel, CtxRef, Hyperlink, Label, ScrollArea, TopBottomPanel, Vec2, Visuals},
     epi::App,
     run_native, NativeOptions,
 };
-use headlines::{Headlines, PADDING};
+use headlines::Headlines;
 
 fn main() {
+    tracing_subscriber::fmt().init();
+
     let app = Headlines::new();
     let mut win_options = NativeOptions::default();
-    win_options.initial_window_size = Some(Vec2::new(600.0, 900.0));
+    win_options.initial_window_size = Some(Vec2::new(600.0, 800.0));
     run_native(Box::new(app), win_options)
 }
 
@@ -27,26 +27,29 @@ impl App for Headlines {
         self.configure_fonts(ctx);
     }
 
-    fn update(&mut self, ctx: &CtxRef, _frame: &mut eframe::epi::Frame<'_>) {
-        self.render_top_panel(ctx);
-        CentralPanel::default().show(ctx, |ui| {
-            // render_header(ui);
-            ScrollArea::vertical()
-                .auto_shrink([false; 2])
-                .show(ui, |ui| self.render_news_cards(ui));
-            render_footer(ctx);
-        });
+    fn update(&mut self, ctx: &CtxRef, frame: &mut eframe::epi::Frame<'_>) {
+        if self.config.dark_mode {
+            ctx.set_visuals(Visuals::dark());
+        } else {
+            ctx.set_visuals(Visuals::light());
+        }
+
+        if !self.api_key_inited {
+            self.render_config(ctx);
+        } else {
+            self.render_top_panel(ctx, frame);
+            CentralPanel::default().show(ctx, |ui| {
+                ScrollArea::vertical()
+                    .auto_shrink([false; 2])
+                    .show(ui, |ui| self.render_news_cards(ui));
+                render_footer(ctx);
+            });
+        }
     }
 
     fn name(&self) -> &str {
         "Headlines"
     }
-}
-
-fn _render_header(ui: &mut Ui) {
-    ui.vertical_centered(|ui| ui.heading("Headlines"));
-    ui.add_space(PADDING);
-    ui.add(Separator::default().spacing(20.));
 }
 
 fn render_footer(ctx: &CtxRef) {
