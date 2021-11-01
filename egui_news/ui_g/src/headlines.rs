@@ -59,24 +59,27 @@ impl Headlines {
 
     pub fn configure_fonts(&self, ctx: &CtxRef) {
         let mut font_def = FontDefinitions::default();
-
         font_def.font_data.insert(
-            "Hasklig".to_string(),
-            Cow::Borrowed(include_bytes!("../assets/Hasklig_Regular.otf")),
+            "Ubuntu".to_string(),
+            Cow::Borrowed(include_bytes!("../assets/Ubuntu-R.ttf")),
         );
         font_def.family_and_size.insert(
             eframe::egui::TextStyle::Heading,
-            (FontFamily::Proportional, 32.0),
+            (FontFamily::Proportional, 26.),
         );
         font_def.family_and_size.insert(
             eframe::egui::TextStyle::Body,
-            (FontFamily::Proportional, 20.0),
+            (FontFamily::Proportional, 20.),
+        );
+        font_def.family_and_size.insert(
+            eframe::egui::TextStyle::Button,
+            (FontFamily::Proportional, 20.),
         );
         font_def
             .fonts_for_family
             .get_mut(&FontFamily::Proportional)
             .unwrap()
-            .insert(0, "Hasklig".to_string());
+            .insert(0, "Ubuntu".to_string());
         ctx.set_fonts(font_def);
     }
 
@@ -112,6 +115,9 @@ impl Headlines {
                     }
                     if theme_btn.clicked() {
                         self.config.dark_mode = !self.config.dark_mode;
+                        if let Err(e) = confy::store("headlines", self.config.clone()) {
+                            tracing::error!("Failed saving config: {}", e);
+                        }
                     }
                 });
             });
@@ -123,7 +129,6 @@ impl Headlines {
         let total = &self.articles.len();
         for (i, a) in (&self.articles).into_iter().enumerate() {
             ui.add_space(PADDING);
-
             // render title
             let title = format!("▶ {}", a.title);
             if self.config.dark_mode {
@@ -131,12 +136,10 @@ impl Headlines {
             } else {
                 ui.colored_label(BLACK, title);
             }
-
             // render desc
             ui.add_space(PADDING);
             let desc = Label::new(&a.desc).text_style(egui::TextStyle::Button);
             ui.add(desc);
-
             // render hyperlinks
             if self.config.dark_mode {
                 ui.style_mut().visuals.hyperlink_color = CYAN;

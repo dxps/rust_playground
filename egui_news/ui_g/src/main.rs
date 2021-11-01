@@ -20,7 +20,7 @@ fn main() {
 
     let app = Headlines::new();
     let mut win_options = NativeOptions::default();
-    win_options.initial_window_size = Some(Vec2::new(600.0, 800.0));
+    win_options.initial_window_size = Some(Vec2::new(660.0, 700.0));
     run_native(Box::new(app), win_options)
 }
 
@@ -72,9 +72,7 @@ impl App for Headlines {
 
             self.render_top_panel(ctx, frame);
             CentralPanel::default().show(ctx, |ui| {
-                ScrollArea::vertical()
-                    .auto_shrink([false; 2])
-                    .show(ui, |ui| self.render_news_cards(ui));
+                ScrollArea::vertical().show(ui, |ui| self.render_news_cards(ui));
                 render_footer(ctx);
             });
         }
