@@ -46,7 +46,10 @@ impl App for Headlines {
             } else {
                 loop {
                     match app_rx.recv() {
-                        Ok(AppMsg::ApiKeyProvided(api_key)) => fetch_news(&api_key, &mut news_tx),
+                        Ok(AppMsg::ApiKeyProvided(api_key)) => {
+                            fetch_news(&api_key, &mut news_tx);
+                            break;
+                        }
                         Err(e) => tracing::error!("Failed receiving news msg: {}", e),
                     }
                 }
