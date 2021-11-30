@@ -1,12 +1,17 @@
 [package]
+description = "A sample of using Rust for WebAssembly"
 edition = "2021"
+license = "MIT"
 name = "wa_image_effects"
+repository = "https://github.com/dxps/rust_playground/tree/master/wa_image_effects"
 version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
+base64 = "0.13.0"
+image = "0.23.14"
 "wasm-bindgen" = "0.2.78"
 
 # web-sys crate exports JS functions to Rust.

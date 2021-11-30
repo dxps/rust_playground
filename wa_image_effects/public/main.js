@@ -18,7 +18,9 @@ async function init() {
         let base64 = fileReader.result.replace(
             /^data:image\/(png|jpg|jpeg);base64,/, ''
         )
-        rustApp.grayscale(base64)
+        let img_data_url = rustApp.grayscale(base64)
+        console.log('Got from rs img_data_url:', img_data_url)
+        document.getElementById('new-img').setAttribute('src', img_data_url)
     }
 
     input.addEventListener('change', () => {
