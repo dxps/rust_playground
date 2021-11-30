@@ -8,3 +8,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 "wasm-bindgen" = "0.2.78"
+
+# web-sys crate exports JS functions to Rust.
+[dependencies.web-sys]
+features = ["console"]
+version = "0.3.55"
