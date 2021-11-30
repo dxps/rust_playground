@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Image Effects</title><link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet"><style>h1 {
+        font-family: 'Pacifico', cursive;
+      }
+
+      .bg {
+        animation: slide 3s ease-in-out infinite alternate;
+        background-image: linear-gradient(-60deg, #ACFFAD 50%, #50CB93 50%);
+      }
+
+      .bg:nth-child(2) {
+        animation-direction:alternate-reverse;
+        animation-duration:4s;
+      }
+      
+      .bg:nth-child(3) {
+        animation-duration:5s;
+      }
+
+      @keyframes slide {
+        0% {
+          transform:translateX(-25%);
+        }
+        100% {
+          transform:translateX(25%);
+        }
+      }</style><script defer="defer" src="index.js"></script></head><body><div class="bg fixed inset-y-0 -inset-x-2/4 opacity-50 z-0 bg-gradient-to-r from-yellow-400 to-pink-500"></div><div class="bg fixed inset-y-0 -inset-x-2/4 opacity-50 z-0 bg-gradient-to-r from-yellow-400 to-pink-500"></div><div class="bg fixed inset-y-0 -inset-x-2/4 opacity-50 z-0 bg-gradient-to-r from-yellow-400 to-pink-500"></div><div class="flex items-center justify-center h-screen relative z-100"><div class="bg-white bg-opacity-95 border shadow-lg p-10 text-center max-w-2xl"><h1 class="text-5xl mb-8">Image Effects</h1><p class="mb-4">Need to do some basic image manipulation? Just upload your image below. We'll take care of the rest.</p><label class="bg-pink-600	text-white w-full p-6 block cursor-pointer font-bold mb-4"><input type="file" id="upload" accept=".png" class="hidden"> Upload PNG Image</label> <img id="new-img" class="w-auto mx-auto"></div></div></body></html>
