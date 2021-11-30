@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "wa_image_effects"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+"wasm-bindgen" = "0.2.78"
