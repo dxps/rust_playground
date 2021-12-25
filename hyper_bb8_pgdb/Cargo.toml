@@ -1,0 +1,11 @@
+[package]
+edition = "2021"
+name = "hyper_bb8_pgdb"
+version = "0.1.0"
+
+[dependencies]
+bb8 = "0.7.1"
+bb8-postgres = "0.7.0"
+hyper = {version = "0.14.16", features = ["http1", "server", "tcp"]}
+tokio = {version = "1.15.0", features = ["rt"]}
+tokio-postgres = "0.7.5"
