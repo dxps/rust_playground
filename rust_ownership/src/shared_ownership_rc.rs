@@ -33,5 +33,14 @@ fn main() {
     // Even if one person gives up ownership, the other person
     // still has shared ownership, so the pets are kept around (yay!)
     drop(sister);
-    println!("Pets: {:?}", brother.pets)
+    println!("Pets: {:?}", brother.pets);
+
+    // ___________________________________________________
+    // Just to get rid of the field name not used warning.
+    let _ = brother
+        .pets
+        .first()
+        .expect("brother has pets")
+        .name
+        .as_str();
 }

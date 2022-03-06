@@ -10,3 +10,7 @@ version = "0.1.0"
 [[bin]]
 name = "shared_ownership_rc"
 path = "src/shared_ownership_rc.rs"
+
+[[bin]]
+name = "borrowing_1"
+path = "src/borrowing_1.rs"
