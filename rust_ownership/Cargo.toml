@@ -14,3 +14,7 @@ path = "src/shared_ownership_rc.rs"
 [[bin]]
 name = "borrowing_1"
 path = "src/borrowing_1.rs"
+
+[[bin]]
+name = "borrowing_2"
+path = "src/borrowing_2.rs"
