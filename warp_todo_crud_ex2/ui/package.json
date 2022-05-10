@@ -1,0 +1,12 @@
+{
+  "name": "warp_todo_crud_ex2_ui",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "A UI for a TODO sample app",
+  "author": {
+    "name": "dxps"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
