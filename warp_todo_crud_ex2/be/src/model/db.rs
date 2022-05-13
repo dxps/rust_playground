@@ -8,9 +8,9 @@ const PG_ROOT_DB: &str = "postgres";
 const PG_ROOT_USER: &str = "postgres";
 const PG_ROOT_PWD: &str = "postgres";
 // App specifics
-const PG_DB: &str = "test";
-const PG_USER: &str = "test";
-const PG_PASS: &str = "test";
+const PG_DB: &str = "todo_app";
+const PG_USER: &str = "todo_app";
+const PG_PASS: &str = "todo_app";
 const PG_MAX_CONNS: u32 = 3;
 
 const SQL_DIR: &str = "ops/db_migration";
@@ -32,7 +32,9 @@ pub async fn init_db() -> Result<DbPool, sqlx::Error> {
     paths.sort();
     for path in paths {
         if let Some(path) = path.to_str() {
-            pexec(&db, &path).await?;
+            if path.ends_with(".sql") && path.contains(SQL_RECREATE) {
+                pexec(&db, &path).await?;
+            }
         }
     }
 
@@ -65,7 +67,10 @@ async fn pexec(db: &DbPool, file: &str) -> Result<(), sqlx::Error> {
     for sql in sqls {
         match sqlx::query(&sql).execute(db).await {
             Ok(_) => (),
-            Err(e) => println!("ERROR pexec'ing sql stmt {}: {:?}", sql, e),
+            Err(e) => {
+                println!("ERROR pexec'ing sql stmt {}: {:?}", sql, e);
+                return Err(e);
+            }
         }
     }
     Ok(())

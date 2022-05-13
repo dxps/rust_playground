@@ -1,8 +1,8 @@
 
 -- DEV ONLY - Comment out for keeping db between restarts.
-DROP DATABASE IF EXISTS app_db;
-DROP USER IF EXISTS app_user;
+DROP DATABASE IF EXISTS todo_app;
+DROP USER IF EXISTS todo_app;
 
 -- DEV ONLY - For quick iterations.
-CREATE USER test PASSWORD 'test';
-CREATE DATABASE test owner test ENCODING = 'UTF-8';
+CREATE USER todo_app PASSWORD 'todo_app';
+CREATE DATABASE todo_app owner todo_app ENCODING = 'UTF-8';
