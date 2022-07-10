@@ -1,8 +1,11 @@
 use std::{fs, path::PathBuf, time::Duration};
 
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use sqlx::{
+    postgres::{PgConnectOptions, PgPoolOptions},
+    ConnectOptions, Pool, Postgres,
+};
 
-const PG_HOST: &str = "localhost:5439";
+const PG_HOST: &str = "localhost";
 // Root (user) specifics
 const PG_ROOT_DB: &str = "postgres";
 const PG_ROOT_USER: &str = "postgres";
@@ -49,6 +52,16 @@ async fn new_db_pool(
     max_conns: u32,
 ) -> Result<DbPool, sqlx::Error> {
     let conn_str = format!("postgres://{}:{}@{}/{}", user, pwd, host, db);
+    let conn = PgConnectOptions::new()
+        .host(host)
+        .port(5439)
+        .username(user)
+        .password(pwd)
+        .ssl_mode(sqlx::postgres::PgSslMode::Disable)
+        .connect()
+        .await;
+    dbg!("[new_db_pool] conn:", conn);
+
     PgPoolOptions::new()
         .max_connections(max_conns)
         .connect_timeout(Duration::from_millis(500))
