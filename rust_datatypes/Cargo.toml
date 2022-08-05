@@ -8,6 +8,6 @@ version = "0.1.0"
 
 [[bin]]
 name = "string_literals"
-path = "src/string_literals.rs"
+path = "src/bin/string_literals.rs"
 
 [dependencies]
