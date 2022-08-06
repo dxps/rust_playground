@@ -1,21 +1,22 @@
 use std::{borrow::BorrowMut, mem::take};
 
 /// This is the implementation of a simple queue.
+/// It's designed like a single linked list, intentionally no `Rc` or `RefCell` are used.
+/// Otherwise, these would be used at least for having references to the items in the queue.
 ///
-/// Note that the standard library offers a queue implementation as `VecDequeue`.
-///
+/// Note that the standard library offers `VecDequeue` as a queue implementation.
 
 struct Queue<T> {
-    end: Option<QueueItem<T>>,
+    head: Option<QueueItem<T>>,
 }
 
 impl<T> Queue<T> {
     pub fn new() -> Self {
-        Queue { end: None }
+        Queue { head: None }
     }
 
     pub fn is_empty(&self) -> bool {
-        match self.end {
+        match self.head {
             Some(_) => false,
             None => true,
         }
@@ -23,28 +24,28 @@ impl<T> Queue<T> {
 
     pub fn add(&mut self, value: T) {
         let item = QueueItem::new(value);
-        if let Some(end) = &mut self.end {
-            let mut last = end;
+        if let Some(head) = &mut self.head {
+            let mut tail = head;
             loop {
-                if let Some(_) = &last.next {
-                    last = last.next.as_mut().unwrap().borrow_mut();
+                if let Some(_) = &tail.next {
+                    tail = tail.next.as_mut().unwrap().borrow_mut();
                 } else {
                     break;
                 }
             }
-            last.next = Some(Box::new(item));
+            tail.next = Some(Box::new(item));
         } else {
-            self.end = Some(item);
+            self.head = Some(item);
         }
     }
 
     pub fn remove(&mut self) -> Option<T> {
         if !self.is_empty() {
-            let last = take(&mut self.end).unwrap();
-            if let Some(next) = last.next {
-                self.end = Some(*next)
+            let head = take(&mut self.head).unwrap();
+            if let Some(next) = head.next {
+                self.head = Some(*next)
             }
-            Some(last.value)
+            Some(head.value)
         } else {
             None
         }
