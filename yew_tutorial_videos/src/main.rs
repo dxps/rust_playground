@@ -11,14 +11,23 @@ fn app() -> Html {
             move |_| {
                 let videos = videos.clone();
                 wasm_bindgen_futures::spawn_local(async move {
-                    let fetched_videos: Vec<Video> = Request::get("/tutorial/data.json")
-                        .send()
-                        .await
-                        .unwrap()
-                        .json()
-                        .await
-                        .unwrap();
-                    videos.set(fetched_videos);
+                    let fetched_videos: Option<Vec<Video>> =
+                        match Request::get("/tutorial/data.json").send().await {
+                            Ok(resp) => match resp.json().await {
+                                Ok(data) => data,
+                                Err(e) => {
+                                    log::error!("Json deserialization error: {e}");
+                                    None
+                                }
+                            },
+                            Err(e) => {
+                                log::error!("Request error: {e}");
+                                None
+                            }
+                        };
+                    if fetched_videos.is_some() {
+                        videos.set(fetched_videos.unwrap());
+                    }
                 });
                 || ()
             },
@@ -27,9 +36,13 @@ fn app() -> Html {
     }
 
     let selected_video = use_state(|| None);
-    let on_video_select = {
+    let on_video_click = {
         let selected_video = selected_video.clone();
         Callback::from(move |video: Video| selected_video.set(Some(video)))
+    };
+    let select_no_video = {
+        let selected_video = selected_video.clone();
+        Callback::from(move |_| selected_video.set(None))
     };
     let details = selected_video.as_ref().map(|video| {
         html! {
@@ -42,7 +55,8 @@ fn app() -> Html {
             <h1>{ "RustConf Explorer" }</h1>
             <div>
                 <h3>{"Videos to watch"}</h3>
-                <VideosList videos={(*videos).clone()} on_click={on_video_select.clone()} />
+                <span style="font-size:small" onclick={select_no_video}>{"Clear selection"}</span>
+                <VideosList videos={(*videos).clone()} on_click={on_video_click} />
             </div>
             { for details }
         </>
@@ -89,5 +103,7 @@ fn video_details(props: &VideosDetailsProps) -> Html {
 }
 
 fn main() {
+    wasm_logger::init(wasm_logger::Config::default());
+    log::info!("Starting up ...");
     yew::start_app::<App>();
 }
