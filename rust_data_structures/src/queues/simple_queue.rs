@@ -5,21 +5,21 @@ use std::{borrow::BorrowMut, mem::take};
 /// Otherwise, these would be used at least for having references to the items in the queue.
 ///
 /// Note that the standard library offers `VecDequeue` as a queue implementation.
-
-struct Queue<T> {
+pub struct Queue<T> {
     head: Option<QueueItem<T>>,
+    depth: usize,
 }
 
 impl<T> Queue<T> {
     pub fn new() -> Self {
-        Queue { head: None }
+        Queue {
+            head: None,
+            depth: 0,
+        }
     }
 
     pub fn is_empty(&self) -> bool {
-        match self.head {
-            Some(_) => false,
-            None => true,
-        }
+        self.depth == 0
     }
 
     pub fn add(&mut self, value: T) {
@@ -37,6 +37,7 @@ impl<T> Queue<T> {
         } else {
             self.head = Some(item);
         }
+        self.depth += 1
     }
 
     pub fn remove(&mut self) -> Option<T> {
@@ -45,14 +46,19 @@ impl<T> Queue<T> {
             if let Some(next) = head.next {
                 self.head = Some(*next)
             }
+            self.depth -= 1;
             Some(head.value)
         } else {
             None
         }
     }
+
+    pub fn depth(&self) -> usize {
+        self.depth
+    }
 }
 
-struct QueueItem<T> {
+pub struct QueueItem<T> {
     value: T,
     next: Option<Box<QueueItem<T>>>,
 }
