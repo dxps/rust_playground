@@ -19,7 +19,7 @@ struct Node {
 pub struct TransactionLog {
     head: Link,
     tail: Link,
-    pub length: u64,
+    length: u64,
 }
 
 impl Node {
@@ -63,6 +63,10 @@ impl TransactionLog {
                 .value
         })
     }
+
+    pub fn length(&self) -> u64 {
+        self.length
+    }
 }
 
 #[cfg(test)]
@@ -76,7 +80,8 @@ mod tests {
         txn_log.append("INSERT INTO mytable VALUES (1,2,3)".to_owned());
         txn_log.append("INSERT INTO mytable VALUES (2,3,4)".to_owned());
         txn_log.append("INSERT INTO mytable VALUES (3,4,5)".to_owned());
-        assert_eq!(txn_log.length, 3);
+        assert_eq!(txn_log.length(), 3);
+
         assert_eq!(
             txn_log.pop(),
             Some("INSERT INTO mytable VALUES (1,2,3)".to_owned())

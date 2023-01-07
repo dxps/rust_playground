@@ -1,4 +1,5 @@
 use rust_data_structures::queues::simple_queue::Queue;
+
 fn main() {
     let mut q = Queue::new();
     q.add("one");
@@ -9,4 +10,6 @@ fn main() {
     assert_eq!(q.depth(), 3);
 
     assert_eq!(q.remove().unwrap(), "one");
+
+    println!("The example ran fine.");
 }
