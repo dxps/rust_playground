@@ -1,0 +1,19 @@
+[package]
+name = "shuttledxpswarmup"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+
+[dependencies]
+axum = "0.6.2"
+
+shuttle-service = { version = "0.8.0", features = ["web-axum"] }
+
+shuttle-shared-db = { version = "0.8.0", features = ["postgres"] }
+sqlx = { version = "0.6.2", features = ["runtime-tokio-native-tls","postgres"] }
+sync_wrapper = "0.1.1"
+
+serde = "1.0.152"
+serde_json = "1.0.91"
