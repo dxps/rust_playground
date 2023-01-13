@@ -17,7 +17,7 @@ async fn axum(#[shuttle_shared_db::Postgres] pool: PgPool) -> ShuttleAxum {
     //
     pool.execute(include_str!("../db/schema.sql"))
         .await
-        .map_err(CustomError::new)?;
+        .map_err(|e| CustomError::new(e).context("failed to execute schema.sql"))?;
 
     let router = router(pool).await;
     let sync_wrapper = SyncWrapper::new(router);
