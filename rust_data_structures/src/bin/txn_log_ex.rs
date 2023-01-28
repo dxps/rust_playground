@@ -1,4 +1,4 @@
-use rust_data_structures::lists::txn_log::TransactionLog;
+use rust_data_structures::lists::TransactionLog;
 
 fn main() {
     let stmt1 = "INSERT INTO mytable VALUES (1,2,3)".to_string();
