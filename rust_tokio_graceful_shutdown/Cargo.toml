@@ -1,0 +1,7 @@
+[package]
+name = "rust_tokio_graceful_shutdown"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.34.0", features = ["full"] }
