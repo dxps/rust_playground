@@ -1,16 +1,6 @@
-//!
-//! ## Overview
-//! Template to have something to get-go in some situations
-//!
-//! This template provides:
-//! - Axum server
-//! - Templates
-//! - Containerization
-//!
-
 use axum::{routing::get, Router};
 use itertools::Itertools;
-use std::net::SocketAddr;
+use tokio::net::TcpListener;
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
 mod handlers;
@@ -30,11 +20,11 @@ async fn main() {
         .nest_service("/static", serve_dir.clone())
         .fallback(handlers::handle_404);
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 7777));
-    tracing::debug!("listening on {}", addr);
+    let addr = "0.0.0.0:7777";
+    let listener = TcpListener::bind(addr).await.unwrap();
+    tracing::debug!("listening on {addr} ");
     let log_layer = TraceLayer::new_for_http();
-    axum::Server::bind(&addr)
-        .serve(app.layer(log_layer).into_make_service())
+    axum::serve(listener, app.layer(log_layer).into_make_service())
         .await
         .unwrap();
 }
