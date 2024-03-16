@@ -1,6 +1,6 @@
 ## Leptos Experience
 
-This project is to evaluate the developer experience while using Leptos.
+This project is to evaluate the developer experience using Leptos.
 
 <br/>
 
@@ -10,30 +10,22 @@ This project is to evaluate the developer experience while using Leptos.
 
 The starting point in the code is `src/app.rs`.
 
-Addtionally, Cargo.toml may need updating as new versions of the dependencies are released, especially if things are not working after a `cargo update`.
+Addtionally, `Cargo.toml` may need updating as new versions of the dependencies are released, especially if things are not working after a `cargo update`.
 
-#### Running the project
+#### Prerequisites
 
-Use `cargo leptos watch` to run the project in "dev mode".
+-   Leptos plugin for cargo. Install it using `cargo install leptos`
+-   Install WASM target using `rustup target add wasm32-unknown-unknown`
+-   `cargo install cargo-generate` - install `cargo-generate` binary (should be installed automatically in future)
+-   `npm install -g sass` - install `dart-sass` (should be optional in future)
 
-#### Installing Additional Tools
+#### Running & Building the Project
 
-By default, `cargo-leptos` uses `nightly` Rust, `cargo-generate`, and `sass`. If you run into any trouble, you may need to install one or more of these tools.
+-   Use `cargo leptos watch` to run the project in "dev mode".
+-   Use `cargo leptos build --release` to compile the release.
+    -   It will generate your server binary in `target/server/release` and your site package in `target/site`.
 
-1. `rustup toolchain install nightly --allow-downgrade` - make sure you have Rust nightly
-2. `rustup target add wasm32-unknown-unknown` - add the ability to compile Rust to WebAssembly
-3. `cargo install cargo-generate` - install `cargo-generate` binary (should be installed automatically in future)
-4. `npm install -g sass` - install `dart-sass` (should be optional in future
-
-#### Compiling for Release
-
-```bash
-cargo leptos build --release
-```
-
-Will generate your server binary in target/server/release and your site package in target/site
-
-#### Testing Your Project
+#### Testing the Project
 
 ```bash
 cargo leptos end-to-end
