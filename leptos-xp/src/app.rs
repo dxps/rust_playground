@@ -19,7 +19,7 @@ pub fn App() -> impl IntoView {
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
-        // <Stylesheet id="leptos" href="/pkg/leptos-xp.css"/>
+        <Stylesheet id="leptos" href="/pkg/leptos-xp.css"/>
 
         // sets the document title
         <Title text="Leptos Xp"/>
@@ -31,7 +31,7 @@ pub fn App() -> impl IntoView {
                 <Routes>
                     <Route path="" view=BlogPreviews />
                     <Route path="/edit/:post_id?" view=EditPost />
-                    <Route path="/view/:postid?" view=ViewPost />
+                    <Route path="/view/:post_id?" view=ViewPost />
                 </Routes>
             </main>
         </Router>
