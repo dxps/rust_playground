@@ -3,6 +3,7 @@ pub mod error_template;
 
 pub mod components;
 pub mod model;
+pub mod repository;
 
 #[cfg(feature = "ssr")]
 pub mod fileserv;
