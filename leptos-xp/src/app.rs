@@ -7,7 +7,17 @@ use crate::components::{blog_previews::BlogPreviews, edit_post::EditPost, view_p
 #[component]
 pub fn Navbar() -> impl IntoView {
     view! {
-        <nav>"The navbar"</nav>
+        <div class="bg-white text-gray-800 px-4 py-3">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="/">Home</a>
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="/">Blog</a></li>
+                        <li><a href="/edit" class="hover:text-blue-700">Create</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     }
 }
 
@@ -27,7 +37,7 @@ pub fn App() -> impl IntoView {
         <Navbar/>
 
         <Router>
-            <main>
+            <main class="bg-gray-50 text-gray-900 p-8 h-full">
                 <Routes>
                     <Route path="" view=BlogPreviews />
                     <Route path="/edit/:post_id?" view=EditPost />
