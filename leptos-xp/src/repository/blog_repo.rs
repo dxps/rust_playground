@@ -3,8 +3,24 @@ use leptos::{server, ServerFnError};
 
 use crate::model::Post;
 
+#[cfg(feature = "ssr")]
+pub mod ssr {
+    use leptos::ServerFnError;
+    use sqlx::{
+        sqlite::{SqlitePool, SqlitePoolOptions},
+        Connection, SqliteConnection,
+    };
+
+    pub async fn db_pool() -> Result<SqlitePool, ServerFnError> {
+        Ok(SqlitePoolOptions::new()
+            .connect("sqlite:post.db")
+            .await
+            .expect("Could not make db pool."))
+    }
+}
+
 #[server(UpsertPost, "/api")]
-pub async fn upsert_post_handler(
+pub async fn upsert_post(
     id: Option<String>,
     dt: String,
     image_url: String,
@@ -12,10 +28,12 @@ pub async fn upsert_post_handler(
     content: String,
 ) -> Result<String, ServerFnError> {
     // TODO: SQL to insert or update.
+    let db_pool = self::ssr::db_pool();
+
     Ok("to-be-implemented".into())
 }
 
-#[server(GetPost, "/api")]
+#[server(GetPost, "/api", "GetJson")]
 pub async fn get_post(id: String) -> Result<Post, ServerFnError> {
     // TODO: SQL to select the row
     Ok(Post {
@@ -27,7 +45,7 @@ pub async fn get_post(id: String) -> Result<Post, ServerFnError> {
     })
 }
 
-#[server(GetPreviews, "/api")]
+#[server(GetPreviews, "/api", "GetJson")]
 pub async fn get_previews(
     oldest: Option<String>,
     newest: Option<String>,

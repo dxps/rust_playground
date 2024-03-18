@@ -8,6 +8,8 @@ This project is to evaluate the developer experience using Leptos.
 
 ### Project Notes
 
+This project was created using `cargo leptos new --git leptos-rs/start-axum`.
+
 The starting point in the code is `src/app.rs`.
 
 Addtionally, `Cargo.toml` may need updating as new versions of the dependencies are released, especially if things are not working after a `cargo update`.
@@ -36,7 +38,7 @@ cargo leptos end-to-end --release
 ```
 
 Cargo-leptos uses Playwright as the end-to-end test tool.  
-Tests are located in end2end/tests directory.
+Tests are located in `end2end/tests` directory.
 
 #### Executing a Server on a Remote Machine Without the Toolchain
 
@@ -63,3 +65,16 @@ LEPTOS_RELOAD_PORT="3001"
 ```
 
 Finally, run the server binary.
+
+#### Database
+
+This project uses SQLite database and it interacts with it usind the popular [sqlx](https://github.com/launchbadge/sqlx) library.
+And using its CLI (installable using `cargo install sqlx-cli`), the initial setup was done as using:
+
+```shell
+> export DATABASE_URL="sqlite:post.db"
+> sqlx database create   # To create the database file (named post.db).
+> sqlx migrate add post  # To create the migration (sql file) for `post` table.
+```
+
+Then that generated file (named `migrations/20240318181214_post.sql` in this case) was filled in with the CREATE TABLE statement.
