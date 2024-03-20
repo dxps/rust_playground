@@ -31,7 +31,7 @@ pub async fn upsert_post(
     title: String,
     content: String,
 ) -> Result<String, ServerFnError> {
-    // TODO: SQL to insert or update.
+    // TODO: SQL to insert or update (lesson 3.3, moment 7:11).
     let db_conn = self::ssr::db_pool().await?.acquire();
 
     Ok("to-be-implemented".into())
