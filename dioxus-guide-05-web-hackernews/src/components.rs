@@ -9,8 +9,8 @@ use crate::{
 pub fn Home() -> Element {
     rsx! {
         div { display: "flex", flex_direction: "row", width: "100%",
-            div { class:"bg-gray-100 h-screen", width: "50%", Stories {} }
-            div { width: "50%", Preview {} }
+            div { class:"bg-gray-100 h-screen overflow-y-auto", width: "50%", Stories {} }
+            div { class:"h-screen overflow-y-auto", width: "50%", Preview {} }
         }
     }
 }
