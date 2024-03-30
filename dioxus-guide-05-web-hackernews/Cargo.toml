@@ -1,0 +1,20 @@
+[package]
+name = "dioxus-guide-05-web-hackernews"
+version = "0.1.0"
+authors = ["dxps <marius.ileana@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+
+dioxus = { git = "https://github.com/DioxusLabs/dioxus", features = ["web", "router"] }
+dioxus-logger = "0.4.1"
+
+async-recursion = "1.1.0"
+console_error_panic_hook = "0.1.7"
+chrono = { version = "0.4.37", features = [ "serde" ] }
+futures = "0.3.30"
+log = "0.4.19"
+reqwest = { version = "0.12.2", features = [ "json" ] }
+
+serde = { version = "1.0.197", features = [ "derive" ] }
+serde_json = "1.0.115"

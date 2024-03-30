@@ -1,0 +1,56 @@
+#===========#
+[application]
+#===========#
+
+# App (Project) Name
+name = "dioxus-guide-05-web-hackernews"
+
+# Dioxus App Default Platform
+# desktop, web
+default_platform = "web"
+
+# `build` & `serve` dist path
+out_dir = "dist"
+
+# resource (assets) file folder
+asset_dir = "assets"
+
+
+#=======#
+[web.app]
+#=======#
+
+# HTML title tag content
+title = "Dioxus Web HackerNews"
+
+
+#===========#
+[web.watcher]
+#===========#
+
+# when watcher trigger, regenerate the `index.html`
+reload_html = true
+
+# which files or dirs are monitored by the watcher
+watch_path = ["src", "assets"]
+
+
+# include `assets` in web platform
+#============#
+[web.resource]
+#============#
+
+# CSS style file
+style = ["tailwind.css"]
+
+# Javascript code file
+script = []
+
+
+#================#
+[web.resource.dev]
+#================#
+
+# Javascript code file
+# serve: [dev-server] only
+script = []
