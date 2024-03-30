@@ -554,6 +554,10 @@ video {
   --tw-contain-style:  ;
 }
 
+.static {
+  position: static;
+}
+
 .relative {
   position: relative;
 }
@@ -578,6 +582,10 @@ video {
 
 .hover\:rounded-md:hover {
   border-radius: 0.375rem;
+}
+
+.hover\:rounded-lg:hover {
+  border-radius: 0.5rem;
 }
 
 .hover\:bg-sky-100:hover {

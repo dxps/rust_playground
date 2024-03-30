@@ -1,6 +1,7 @@
 #![allow(non_snake_case)]
 
 mod components;
+mod fetch_data;
 mod model;
 mod state;
 
