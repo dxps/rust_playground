@@ -1,5 +1,5 @@
 use chrono::Local;
-use leptos::{server, ServerFnError};
+use leptos::{logging::log, server, ServerFnError};
 
 use crate::model::Post;
 
@@ -32,7 +32,7 @@ pub async fn upsert_post(
     content: String,
 ) -> Result<String, ServerFnError> {
     // TODO: SQL to insert or update (lesson 3.3, moment 7:11).
-    let db_conn = self::ssr::db_pool().await?.acquire();
+    let _db_conn = self::ssr::db_pool().await?.acquire();
 
     Ok("to-be-implemented".into())
 }
@@ -51,11 +51,17 @@ pub async fn get_post(id: String) -> Result<Post, ServerFnError> {
     // Ok(res)
 
     match sqlx::query_as::<_, Post>("SELECT * FROM post WHERE id = ?")
-        .bind(id)
+        .bind(&id)
         .fetch_one(&mut db_conn)
         .await
     {
-        Ok(post) => Ok(post),
+        Ok(post) => {
+            log!(
+                "{}",
+                format!("get_post({}) found post w/ title='{}'.", &id, &post.title)
+            );
+            Ok(post)
+        }
         Err(e) => Err(ServerFnError::ServerError(e.to_string())),
     }
 
@@ -78,7 +84,7 @@ pub async fn get_previews(
     //
     // let db_conn = self::ssr::db_pool().await?.acquire().await?;
     let mut db_conn = self::ssr::db().await?;
-    let res: Vec<Post> = sqlx::query_as(
+    let _res: Vec<Post> = sqlx::query_as(
         "SELECT id, dt, image_url, title
          CASE
             WHEN LENGTH(text) > $1 THEN SUBSTR(text, $1) || ' ...'
@@ -92,6 +98,7 @@ pub async fn get_previews(
     .fetch_all(&mut db_conn)
     .await?;
 
+    // TODO: use the previous res
     Ok(vec![
         Post {
             id: "1".into(),
