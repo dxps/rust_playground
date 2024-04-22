@@ -33,7 +33,7 @@ pub fn TodoApp() -> impl IntoView {
         <Stylesheet id="leptos" href="/pkg/server_fns_axum.css"/>
         <Router>
             <header>
-                <h1>"Server Functions Demo"</h1>
+                <h1>"Leptos' Server Functions Demo"</h1>
             </header>
             <main>
                 <Routes>
