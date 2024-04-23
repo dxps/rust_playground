@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "hydrate")]
-use chrono::Local;
-#[cfg(feature = "hydrate")]
-use chrono::NaiveDateTime;
+#[cfg(not(feature = "ssr"))]
+use chrono::{Local, NaiveDateTime};
 
 #[cfg(feature = "ssr")]
 use sqlx::types::chrono::{Local, NaiveDateTime};
