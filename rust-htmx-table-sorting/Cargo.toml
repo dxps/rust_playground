@@ -1,0 +1,12 @@
+[package]
+name = "htmx-example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7.5"
+fake = { version = "2.9.2", features = ["derive"] }
+maud = { version = "0.26.0", features = ["axum"] }
+rand = "0.8.5"
+rand_chacha = "0.3.1"
+tokio = { version = "1.39.3", features = ["full"] }
