@@ -38,8 +38,6 @@ async fn main() {
         .and(users_store_route.clone())
         .and_then(login);
 
-    // let logout_route = warp::path("logout").map(|| "Logout Route");
-
     let routes = register_route.or(login_route);
 
     warp::serve(routes).run(([127, 0, 0, 1], 3000)).await
@@ -53,8 +51,6 @@ async fn register(
     if users.contains_key(&user.username) {
         return Ok(StatusCode::BAD_REQUEST);
     }
-    // a user having hashed password will be saved instead
-    // users.insert(user.username.clone(), user);
     let hashed_user = User {
         username: user.username,
         password: hash(user.password.as_bytes()),
@@ -71,7 +67,6 @@ async fn login(
     match users.get(&credentials.username) {
         None => Ok(StatusCode::BAD_REQUEST),
         Some(user) => {
-            // if credentials.password == user.password {
             if verify(&user.password, credentials.password.as_bytes()) {
                 Ok(StatusCode::OK)
             } else {
