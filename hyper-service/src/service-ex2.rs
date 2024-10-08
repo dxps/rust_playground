@@ -20,7 +20,7 @@ fn main() {
     pretty_env_logger::init();
     let addr = "127.0.0.1:3000".parse().unwrap(); // using 'turbofish' (to explicit the type) is not needed here
 
-    rt::run(future::lazy(move || {
+    rt::run(future::lazy(move |_| {
         // create a Client for the service
         let client = Client::new();
 
