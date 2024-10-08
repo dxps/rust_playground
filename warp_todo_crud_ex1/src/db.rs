@@ -1,5 +1,4 @@
 use crate::{data::*, error, error::Error::*, DbConn, DbPool};
-use chrono::prelude::*;
 use mobc_postgres::{tokio_postgres, PgConnectionManager};
 use tokio_postgres::{Config, Error, NoTls, Row};
 
@@ -58,14 +57,8 @@ pub async fn create_todo(db_pool: &DbPool, body: TodoRequest) -> Result<Todo> {
 fn row_to_todo(row: &Row) -> Todo {
     let id: i32 = row.get(0);
     let name: String = row.get(1);
-    let created_at: DateTime<Utc> = row.get(2);
     let checked: bool = row.get(3);
-    Todo {
-        id,
-        name,
-        created_at,
-        checked,
-    }
+    Todo { id, name, checked }
 }
 
 pub async fn fetch_todos(db_pool: &DbPool, search: Option<String>) -> Result<Vec<Todo>> {
