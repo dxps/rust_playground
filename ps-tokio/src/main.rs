@@ -1,6 +1,7 @@
+use std::net::SocketAddr;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
-    net::TcpListener,
+    net::{TcpListener, TcpStream},
     signal,
     sync::broadcast,
 };
@@ -9,6 +10,9 @@ use tokio_util::sync::CancellationToken;
 #[tokio::main]
 async fn main() {
     //
+    let tracing_subscriber = tracing_subscriber::FmtSubscriber::new();
+    tracing::subscriber::set_global_default(tracing_subscriber).unwrap();
+
     let endpoint = "localhost:8080";
     let listener = TcpListener::bind(endpoint)
         .await
@@ -22,7 +26,7 @@ async fn main() {
     tokio::spawn(async move {
         match signal::ctrl_c().await {
             Ok(()) => {
-                println!("Shutting down the tasks ...");
+                tracing::warn!("Shutting down the tasks ...");
                 cancel_token.cancel();
                 return;
             }
@@ -31,13 +35,26 @@ async fn main() {
     });
 
     loop {
+        let mut socket: TcpStream;
+        let addr: SocketAddr;
+
+        tokio::select! {
+            result = listener.accept() => {
+                (socket, addr) = result.unwrap();
+            }
+            _ = token.cancelled() => {
+                tracing::info!("Ending the listening loop ...");
+                break;
+            }
+        }
+
         let broadcast_tx = broadcast_tx.clone();
         let mut rx = broadcast_tx.subscribe();
-        let (mut socket, addr) = listener.accept().await.unwrap();
-
         let token = token.clone();
 
+        // Handle each connection in a separate task.
         tokio::spawn(async move {
+            tracing::info!("Spawning new task ...");
             let (stream_reader, mut stream_writer) = socket.split();
             let mut message = String::new();
             let mut reader = BufReader::new(stream_reader);
@@ -49,7 +66,13 @@ async fn main() {
                                 if bytes == 0 {
                                     break;
                                 }
-                                broadcast_tx.send((message.clone(), addr)).unwrap();
+                                message = message.strip_suffix("\r\n").unwrap().to_string();
+                                if message.len() == 0 {
+                                    continue;
+                                }
+                                tracing::info!("Received message: {}", message);
+                                tracing::info!("Broadcasting message: {}", message);
+                                broadcast_tx.send((format!("{}\n", message.clone()), addr)).unwrap();
                                 message.clear();
                             },
                             Err(_) => break, // Mainly to cover the Ctrl+C and Enter case (on the client).
@@ -63,7 +86,8 @@ async fn main() {
                         }
                     }
                     _ = token.cancelled() => {
-                        println!("Task shutdown done.");
+                        stream_writer.shutdown().await.unwrap();
+                        tracing::info!("Task shutdown done.");
                         break;
                     }
                 }
