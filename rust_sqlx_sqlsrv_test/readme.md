@@ -7,5 +7,5 @@ A Rust based experiment to test the behavior that it was initially faced and des
 ### Usage
 
 1. Set the `JDBC_CONN_STRING` in your `.env` file.<br/>
-   Example: `JDBC_CONN_STRING="jdbc:sqlserver://my-sql-server:1433;database=test;user=myUser;password=myPass;trustServerCertificate=true"`
+   Example: `JDBC_CONN_STRING="jdbc:sqlserver://my-sql-server:1433;database=test;user=myUser;password=myPass;trustServerCertificate=true;sendStringParametersAsUnicode=false"`
 1. Use `cargo run`

@@ -3,11 +3,8 @@ use async_std::net::TcpStream;
 use once_cell::sync::Lazy;
 use tiberius::{Client, Config, SqlBrowser};
 
-static JDBC_CONN_STRING: Lazy<String> = Lazy::new(|| {
-    std::env::var("JDBC_CONN_STRING").unwrap_or_else(|_| {
-        "jdbc:sqlserver://127.0.0.1:1433;database=test;user=developer;password=developer;trustServerCertificate=true".to_owned()
-    })
-});
+static JDBC_CONN_STRING: Lazy<String> =
+    Lazy::new(|| std::env::var("JDBC_CONN_STRING").expect("JDBC_CONN_STRING env var is not set"));
 
 /// Initialize the client by connecting to SQL Server.
 pub async fn init_client() -> anyhow::Result<Client<TcpStream>> {
@@ -28,6 +25,7 @@ pub async fn uninit_client(client: Client<TcpStream>) -> anyhow::Result<()> {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct UserSession {
     id: String,
     username: String,
@@ -39,7 +37,7 @@ impl UserSession {
     }
 }
 
-pub async fn get_user_session(
+pub async fn get_user_session_using_parameterized_query(
     client: &mut Client<TcpStream>,
     token: String,
 ) -> Result<Option<UserSession>> {
@@ -61,7 +59,7 @@ pub async fn get_user_session(
     Ok(Some(user_session))
 }
 
-pub async fn get_user_session_using_query(
+pub async fn get_user_session_using_string_constructed_query(
     client: &mut Client<TcpStream>,
     token: String,
 ) -> Result<Option<UserSession>> {
