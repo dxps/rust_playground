@@ -1,5 +1,5 @@
 [package]
-name = "rust_sqlx_sqlsrv_test"
+name = "rust_sqlsrv_tiberius"
 version = "0.1.0"
 edition = "2021"
 authors = ["dxps <marius.ileana@gmail.com>"]

@@ -1,4 +1,4 @@
-use rust_sqlx_sqlsrv_test::{
+use rust_sqlsrv_tiberius::{
     get_user_session_using_parameterized_query, get_user_session_using_string_constructed_query,
     init_client, uninit_client,
 };
