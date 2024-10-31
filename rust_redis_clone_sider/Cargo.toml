@@ -1,0 +1,6 @@
+[package]
+name = "rust_redis_clone_sider"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
