@@ -1,9 +1,10 @@
 use std::{fmt::Display, string::FromUtf8Error};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum RespError {
     FromUtf8,
     OutOfBounds(usize),
+    WrongType,
 }
 
 impl Display for RespError {
@@ -11,6 +12,7 @@ impl Display for RespError {
         match self {
             RespError::FromUtf8 => write!(f, "Cannot convert to UTF-8"),
             RespError::OutOfBounds(index) => write!(f, "Out of bounds at index {}", index),
+            RespError::WrongType => write!(f, "Wrong prefix for RESP type"),
         }
     }
 }
