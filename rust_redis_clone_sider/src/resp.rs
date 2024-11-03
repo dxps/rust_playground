@@ -1,5 +1,20 @@
 use crate::resp_result::{RespError, RespResult};
 
+#[derive(Debug, PartialEq)]
+pub enum Resp {
+    SimpleString(String),
+}
+
+/// Parses a simple string in the form `+VALUE\r\n`.
+fn parse_simple_string(buffer: &[u8], index: &mut usize) -> RespResult<Resp> {
+    //
+    resp_remove_type('+', buffer, index)?;
+
+    let line = binary_extract_line_as_string(buffer, index)?;
+
+    Ok(Resp::SimpleString(line))
+}
+
 /// Extract bytes from the buffer until a `\r` is reached.
 fn binary_extract_line(buffer: &[u8], index: &mut usize) -> RespResult<Vec<u8>> {
     //
@@ -65,6 +80,17 @@ pub fn resp_remove_type(value: char, buffer: &[u8], index: &mut usize) -> RespRe
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_parse_simple_string() {
+        let buffer = "+OK\r\n".as_bytes();
+        let mut index = 0;
+
+        let output = parse_simple_string(buffer, &mut index).unwrap();
+
+        assert_eq!(output, Resp::SimpleString(String::from("OK")));
+        assert_eq!(index, 5);
+    }
 
     #[test]
     fn test_binary_extract_line_empty_buffer() {
