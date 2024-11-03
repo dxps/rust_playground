@@ -14,3 +14,4 @@ Then connect to it using `redis-cli` and run commands (with capitals or small ca
 The supported commands are:
 
 -   `PING`
+-   `ECHO 42`
