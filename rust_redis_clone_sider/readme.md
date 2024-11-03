@@ -2,6 +2,8 @@
 
 This is one of the Redis clones that exists in the wild, as a learning experiment.
 
+Of course, it doesn't implement the whole [RESP (Redis serialization protocol)](https://redis.io/docs/latest/develop/reference/protocol-spec/).
+
 <br/>
 
 ### Usage

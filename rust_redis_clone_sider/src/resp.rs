@@ -1,8 +1,18 @@
+use std::fmt::Display;
+
 use crate::resp_result::{RespError, RespResult};
 
 #[derive(Debug, PartialEq)]
 pub enum Resp {
     SimpleString(String),
+}
+
+impl Display for Resp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Resp::SimpleString(string) => write!(f, "+{}\r\n", string),
+        }
+    }
 }
 
 /// Parses a simple string in the form `+VALUE\r\n`.
