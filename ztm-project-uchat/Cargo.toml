@@ -1,4 +1,6 @@
 [workspace]
+resolver = "2"
+
 default-members = [
   "backend/server",
   "backend/crypto",
@@ -6,6 +8,7 @@ default-members = [
   "frontend",
   "shared/cookie",
 ]
+
 members = [
   "backend/server",
   "backend/crypto",
