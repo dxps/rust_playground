@@ -1,10 +1,11 @@
 [package]
-name = "traits_and_generic_types"
+name = "rust_generics_traits"
+description = "Samples of using Rust generics and traits"
 version = "0.1.0"
 authors = ["<marius.ileana@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+#--------------------------------------- 
 
 [[bin]]
 name = "dyn_dispatch_show1"
@@ -21,3 +22,7 @@ path = "src/generics_list_get_max_ref.rs"
 [[bin]]
 name = "generics_list_get_max_cpy"
 path = "src/generics_list_get_max_cpy.rs"
+
+[[bin]]
+name = "trait_objects_attrs"
+path = "src/trait_objects_attrs.rs"

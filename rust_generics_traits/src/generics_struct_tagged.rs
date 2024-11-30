@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------------------
 // This example shows a structure named `Tagged` using `T` is a generic type.
 // The `tag()` method is implemented in a `impl` block that also declares `T`
-// as a generic type. Without it (just `impl Tagged<T>`), Rustc would consider
+// as a generic type. Without it (just `impl Tagged<T>`), rustc would consider
 // `T` as a concrete type, which is not.
 // ----------------------------------------------------------------------------
 
@@ -18,11 +18,11 @@ impl<T> Tagged<T> {
 
 fn main() {
     let tagged_item = Tagged {
-        tag: String::from("tag1"),
-        value: "#something",
+        tag: "comm".into(),
+        value: "Communication related",
     };
     println!(
-        "\n>>> Item tagged with '{}' and value '{}'.\n",
+        "\n>>> Item tagged with '{}' and having value '{}'.\n",
         tagged_item.tag(),
         tagged_item.value
     )
