@@ -7,6 +7,6 @@ edition = "2021"
 axum = "0.7.5"
 fake = { version = "2.9.2", features = ["derive"] }
 maud = { version = "0.26.0", features = ["axum"] }
-rand = "0.8.5"
+rand = "0.9.3"
 rand_chacha = "0.3.1"
 tokio = { version = "1.43.1", features = ["full"] }
