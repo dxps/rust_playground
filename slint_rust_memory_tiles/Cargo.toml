@@ -6,11 +6,21 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-slint = "1.14.1"
+slint = "1.16.1"
 
 [build-dependencies]
-slint-build = "1.14.1"
+slint-build = "1.16.1"
 
 [profile.release]
 codegen-units = 1
 lto = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = { version = "0.2" }
+getrandom = { version = "0.4.2", features = ["wasm_js"] }
+
+# To turn the binary into a library.
+# This is because wasm-pack requires Rust to generate a "cdylib".
+[lib]
+path = "src/main.rs"
+crate-type = ["cdylib"]

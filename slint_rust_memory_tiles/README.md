@@ -1,6 +1,11 @@
-# Slint Rust Template
+# Slint Rust - Memory Tiles
 
-A template for a Rust application that's using [Slint](https://slint.rs/) for the user interface.
+This is based on Slint's [quickstart](https://docs.slint.dev/latest/docs/slint/tutorial/quickstart/) tutorial.
+
+<br/>
+
+<details>
+<summary>Project template notes</summary>
 
 ## About
 
@@ -16,7 +21,7 @@ Rust code, how to react to callbacks, get and set properties, and use basic widg
 3. Rename the extracted directory and change into it:
     ```
     mv slint-rust-template-main my-project
-    cd my-project    
+    cd my-project
     ```
 4. Build with `cargo`:
     ```
@@ -36,3 +41,5 @@ about the Slint APIs and the `.slint` markup language, check out our [online doc
 
 Don't forget to edit this readme to replace it by yours, and edit the `name =` field in `Cargo.toml` to match the name of your
 project.
+
+</details>
