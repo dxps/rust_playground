@@ -1,0 +1,28 @@
+package dxps:service-plugins;
+
+interface plugin-api {
+  record plugin-metadata {
+    name: string,
+    version: string,
+    description: string,
+  }
+
+  record request {
+    method: string,
+    path: string,
+    body: string,
+  }
+
+  record response {
+    status: u16,
+    body: string,
+  }
+
+  metadata: func() -> plugin-metadata;
+  configure: func(config-json: string) -> result<_, string>;
+  handle: func(req: request) -> result<response, string>;
+}
+
+world plugin {
+  export plugin-api;
+}
