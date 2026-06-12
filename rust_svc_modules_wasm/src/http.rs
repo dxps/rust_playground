@@ -1,3 +1,6 @@
+use crate::plugin_manager::{
+    DispatchRequest, PluginError, PluginManager, RegisterPlugin, UpdatePluginConfig,
+};
 use axum::{
     Json, Router,
     extract::{Path, State},
@@ -6,10 +9,6 @@ use axum::{
     routing::{get, post},
 };
 use serde::Serialize;
-
-use crate::plugin_manager::{
-    DispatchRequest, PluginError, PluginManager, RegisterPlugin, UpdatePluginConfig,
-};
 
 pub fn router(plugin_manager: PluginManager) -> Router {
     Router::new()

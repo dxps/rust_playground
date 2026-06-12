@@ -1,10 +1,9 @@
+use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeMap,
     path::{Path, PathBuf},
     sync::Arc,
 };
-
-use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tokio::sync::Mutex;
 use wasmtime::{

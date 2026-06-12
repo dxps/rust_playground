@@ -3,8 +3,8 @@ mod http;
 mod plugin_manager;
 
 use std::net::SocketAddr;
-
 use tower_http::trace::TraceLayer;
+use tracing::info;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::plugin_manager::PluginManager;
@@ -18,9 +18,9 @@ async fn main() -> anyhow::Result<()> {
 
     let plugin_manager = PluginManager::new()?;
     let app = http::router(plugin_manager).layer(TraceLayer::new_for_http());
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3012));
 
-    tracing::info!(%addr, "starting plugin host service");
+    info!(%addr, "starting plugin host service");
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;
 

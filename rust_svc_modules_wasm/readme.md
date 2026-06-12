@@ -1,4 +1,4 @@
-# Axum WIT Component Plugin Host
+# A Rust (Axum-based) Service with a minimal (WIT Component Model based) Plugin System
 
 This is a small Axum service that manages WebAssembly Component Model plugins at runtime.
 
@@ -18,13 +18,11 @@ The contract lives in [wit/plugin.wit](wit/plugin.wit). A plugin exports `dxps:s
 - `configure(config-json: string) -> result<_, string>`
 - `handle(req: request) -> result<response, string>`
 
-## Run the Host
+## Run
 
-```sh
-cargo run
-```
+Use the classic `cargo run` to start the service.
 
-The service listens on `127.0.0.1:3000`.
+It listens on `127.0.0.1:3000`.
 
 ## HTTP API
 
